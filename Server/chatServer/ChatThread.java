@@ -57,6 +57,9 @@ public class ChatThread extends Thread {
                 // NO_ADMIN_RIGHTS;
                 // NO_SUCH_MESSAGE;
 
+                // If command not exists
+                // INVALID_COMMAND
+
             } catch (IOException e) {
                 e.printStackTrace();
                 return;

@@ -7,6 +7,7 @@ public class Message {
     private final String from;
     private final String content;
     private final Timestamp date;
+
     public Message(int id, String from, String content, Timestamp date) {
         this.id = id;
         this.from = from;
