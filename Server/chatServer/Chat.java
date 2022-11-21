@@ -1,25 +1,28 @@
 package chatServer;
 
 import java.io.IOException;
-import javax.net.ssl.*;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class Chat {
     public static void main(String[] args) {
         int port = 9000;
-        System.setProperty("javax.net.ssl.keyStore","C:\\Users\\maxga\\.jdks\\openjdk-18.0.2.1\\bin\\KeyStore1.jks");
-        System.setProperty("javax.net.ssl.keyStorePassword","123456");
+        ServerSocket serverSocket = null;
+        Socket socket = null;
 
         try {
-            SSLServerSocketFactory sslServerSocketFactory = (SSLServerSocketFactory)SSLServerSocketFactory.getDefault();
-            SSLServerSocket sslServerSocket = (SSLServerSocket) sslServerSocketFactory.createServerSocket(port);
-            System.out.println("Server Started & Ready to accept Client Connection");
-
-            while (true) {
-                SSLSocket sslSocket = (SSLSocket)sslServerSocket.accept();
-                new ChatThread(sslSocket).start();
-            }
+            serverSocket = new ServerSocket(port);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        while (true) {
+            try {
+                socket = serverSocket.accept();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            new ChatThread(socket).start();
         }
     }
 }
