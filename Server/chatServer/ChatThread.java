@@ -1,24 +1,24 @@
 package chatServer;
 
 import java.io.*;
-import java.net.Socket;
+import javax.net.ssl.*;
 
 public class ChatThread extends Thread {
-    private Socket socket;
+    private SSLSocket sslSocket;
 
-    public ChatThread(Socket socket) {
-        this.socket = socket;
+    public ChatThread(SSLSocket sslSocket) {
+        this.sslSocket = sslSocket;
     }
 
     public void run() {
-        InputStream socketInputStream = null;
+        InputStream SSLSocketInputStream = null;
         BufferedReader inp = null;
         DataOutputStream out = null;
 
         try {
-            socketInputStream = socket.getInputStream();
-            inp = new BufferedReader(new InputStreamReader(socketInputStream));
-            out = new DataOutputStream(socket.getOutputStream());
+            SSLSocketInputStream = sslSocket.getInputStream();
+            inp = new BufferedReader(new InputStreamReader(SSLSocketInputStream));
+            out = new DataOutputStream(sslSocket.getOutputStream());
         } catch (IOException e) {
             e.printStackTrace();
             return;
