@@ -33,6 +33,6 @@ public class Message {
 
     @Override
     public String toString() {
-        return String.format("Message(%d, %s, %s, %s, %s, %d, %d)", id, from, content, date.toString());
+        return String.format("Message(%d, %s, %s, %s)", id, from, content, date.toString());
     }
 }
