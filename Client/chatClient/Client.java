@@ -19,25 +19,23 @@ public class Client {
     List<Message> messages;
     static int logged = 0;
     //static String message=Message(idCounter,username,value,);
-
     private static BufferedReader reader; // нам нужен ридер читающий с консоли, иначе как
     // мы узнаем что хочет сказать клиент?
     private static BufferedReader in; // поток чтения из сокета
     private static BufferedWriter out; // поток записи в сокет
 
     public static void main(String[] args) {
-        System.setProperty("javax.net.ssl.trustStore","TrustStore.jts");
+        System.setProperty("javax.net.ssl.trustStore","C:\\Users\\maxga\\.jdks\\openjdk-18.0.2.1\\bin\\TrustStore.jts");
         System.setProperty("javax.net.ssl.trustStorePassword","123456");
         try {
+            SSLSocketFactory sslsocketfactory = (SSLSocketFactory)SSLSocketFactory.getDefault();
+            SSLSocket sslClientSocket = (SSLSocket)sslsocketfactory.createSocket("localhost",port);
             try {
-                // подключение по данным сервера
-                clientSocket = new Socket("localhost", port); // этой строкой мы запрашиваем
-                //  у сервера доступ на соединение
                 reader = new BufferedReader(new InputStreamReader(System.in));
                 // поток, принимаемый с сервера
-                in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                in = new BufferedReader(new InputStreamReader(sslClientSocket.getInputStream()));
                 // поток, который отдаем на сервер
-                out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+                out = new BufferedWriter(new OutputStreamWriter(sslClientSocket.getOutputStream()));
 
                 loginCookie();
                 while (true) {
@@ -66,7 +64,7 @@ public class Client {
                     }
                 }
             } finally { // в любом случае необходимо закрыть сокет и потоки
-                clientSocket.close();
+                sslClientSocket.close();
                 in.close();
                 out.close();
             }
