@@ -141,12 +141,13 @@ public class DBConnect {
         return null;
     }
 
-    public static User getUser(String searchUsername) {
-        String sql = "SELECT * FROM users WHERE username = ? LIMIT 1";
+    public static User getUser(String searchUsername, String searchPasswordHash) {
+        String sql = "SELECT * FROM users WHERE username = ? AND passwordHash = ? LIMIT 1";
 
         try (Connection connection = getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, searchUsername);
+            preparedStatement.setString(2, searchPasswordHash);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
@@ -229,9 +230,8 @@ public class DBConnect {
         return result;
     }
 
-    public static void createSession(int userId) {
+    public static void createSession(int userId, String value) {
         String sql = "INSERT INTO sessions(user_id, value) VALUES (?,?)";
-        String value = Cookies.getCookie();
 
         try (Connection connection = getConnection()) {
             PreparedStatement preparedStatement = getConnection().prepareStatement(sql);
@@ -260,6 +260,8 @@ public class DBConnect {
 
                 if ((now.getTime() - time.getTime()) / 1000 < 86400) {
                     return getUser(userId);
+                } else {
+                    deleteSession(value);
                 }
             }
         } catch (SQLException e) {
@@ -268,5 +270,19 @@ public class DBConnect {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static void deleteSession(String value) {
+        String sql = "DELETE FROM sessions WHERE value = ?";
+
+        try (Connection connection = getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, value);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }
