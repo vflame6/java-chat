@@ -4,7 +4,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.io.*;
-import java.net.Socket;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 
 public class Client {
     InetAddress ip = null;
@@ -19,13 +20,14 @@ public class Client {
     static int logged = 0;
     //static String message=Message(idCounter,username,value,);
 
-    private static Socket clientSocket; //сокет для общения
     private static BufferedReader reader; // нам нужен ридер читающий с консоли, иначе как
     // мы узнаем что хочет сказать клиент?
     private static BufferedReader in; // поток чтения из сокета
     private static BufferedWriter out; // поток записи в сокет
 
     public static void main(String[] args) {
+        System.setProperty("javax.net.ssl.trustStore","TrustStore.jts");
+        System.setProperty("javax.net.ssl.trustStorePassword","123456");
         try {
             try {
                 // подключение по данным сервера
