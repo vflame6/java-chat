@@ -25,7 +25,7 @@ public class Client {
     private static BufferedWriter out; // поток записи в сокет
 
     public static void main(String[] args) {
-        System.setProperty("javax.net.ssl.trustStore","C:\\Users\\maxga\\.jdks\\openjdk-18.0.2.1\\bin\\TrustStore.jts");
+        System.setProperty("javax.net.ssl.trustStore","encryption/TrustStore.jts");
         System.setProperty("javax.net.ssl.trustStorePassword","123456");
         try {
             SSLSocketFactory sslsocketfactory = (SSLSocketFactory)SSLSocketFactory.getDefault();
