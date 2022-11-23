@@ -36,6 +36,10 @@ public class ChatThread extends Thread {
                 String output = "";
 
                 switch (command[0]) {
+                    // testConnection()
+                    case ("TEST_CONNECTION"):
+                        output = testConnection();
+                        break;
                     // login(String username, String password)
                     case ("LOGIN"):
                         String[] credentials = command[1].split(" ");
@@ -72,6 +76,14 @@ public class ChatThread extends Thread {
                 return;
             }
         }
+    }
+
+    // Input:
+    // TEST_CONNECTION;
+    // Returns:
+    // OK;
+    private String testConnection() {
+        return "OK;";
     }
 
     // Input:
