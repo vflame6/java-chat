@@ -16,6 +16,7 @@ public class Chat {
 
             while (true) {
                 SSLSocket sslSocket = (SSLSocket)sslServerSocket.accept();
+                System.out.println("New connection from: " + sslSocket.getRemoteSocketAddress());
                 new ChatThread(sslSocket).start();
             }
         } catch (IOException e) {

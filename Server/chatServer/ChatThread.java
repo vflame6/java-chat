@@ -37,8 +37,8 @@ public class ChatThread extends Thread {
 
                 switch (command[0]) {
                     // testConnection()
-                    case ("TEST_CONNECTION"):
-                        output = testConnection();
+                    case ("PING"):
+                        output = ping();
                         break;
                     // login(String username, String password)
                     case ("LOGIN"):
@@ -82,8 +82,8 @@ public class ChatThread extends Thread {
     // TEST_CONNECTION;
     // Returns:
     // OK;
-    private String testConnection() {
-        return "OK;";
+    private String ping() {
+        return "PONG;";
     }
 
     // Input:
