@@ -156,11 +156,12 @@ public class ChatThread extends Thread {
         {
             return "INCORRECT_TELEPHONE;";
         }
-        DBConnect.createUser(username, telephone, passwordHash);
+
         User user = DBConnect.getUser(username);
-        if (Objects.isNull(user)) {
+        if (!Objects.isNull(user)) {
             return "INVALID_USERNAME;";
         }
+        DBConnect.createUser(username, telephone, passwordHash);
 
         return "OK;";
 

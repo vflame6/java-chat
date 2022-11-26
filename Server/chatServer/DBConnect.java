@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DBConnect {
-    private static final String DB_URL = "jdbc:sqlite:chatDatabase.db";
+    private static final String DB_URL = "jdbc:sqlite:Server/chatDatabase.db";
     private static final String DRIVER = "org.sqlite.JDBC";
 
     private DBConnect() {}
