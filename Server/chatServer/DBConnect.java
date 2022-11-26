@@ -36,8 +36,8 @@ public class DBConnect {
                 "id integer PRIMARY KEY,\n" +
                 "username text NOT NULL,\n" +
                 "telephone text NOT NULL,\n" +
-                "passwordHash text\n" +
-                "is_admin integer\n" +
+                "passwordHash text,\n" +
+                "isAdmin integer\n" +
                 ");";
         try (Connection connection = getConnection()) {
             Statement statement = connection.createStatement();
@@ -54,8 +54,8 @@ public class DBConnect {
         String sql = "CREATE TABLE IF NOT EXISTS mails (\n" +
                 "id INTEGER PRIMARY KEY,\n" +
                 "fromUser text NOT NULL,\n" +
-                "content text,\n" +
-                "time DATETIME DEFAULT CURRENT_TIMESTAMP,\n" +
+                "content text NOT NULL,\n" +
+                "time DATETIME DEFAULT CURRENT_TIMESTAMP\n" +
                 ");";
         try (Connection connection = getConnection()) {
             Statement statement = connection.createStatement();
@@ -86,7 +86,7 @@ public class DBConnect {
     }
 
     private static void createAdminUser() {
-        String sql = "INSERT INTO users(username, telephone, passwordHash, is_admin) VALUES('admin','+7 (999) 999-99-99', '21232f297a57a5a743894a0e4a801fc3', 1)";
+        String sql = "INSERT INTO users(username, telephone, passwordHash, isAdmin) VALUES('admin','+7 (999) 999-99-99', '21232f297a57a5a743894a0e4a801fc3', 1)";
 
         try (Connection connection = getConnection()){
             Statement statement = connection.createStatement();
@@ -122,6 +122,31 @@ public class DBConnect {
         try (Connection connection = getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, searchId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt(1);
+                String username = resultSet.getString(2);
+                String telephone = resultSet.getString(3);
+                String passwordHash = resultSet.getString(4);
+                int isAdmin = resultSet.getInt(5);
+
+                return new User(id, username, telephone, passwordHash, isAdmin);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static User getUser(String searchUsername) {
+        String sql = "SELECT * FROM users WHERE username = ? LIMIT 1";
+
+        try (Connection connection = getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, searchUsername);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
