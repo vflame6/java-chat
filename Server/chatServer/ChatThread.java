@@ -4,6 +4,8 @@ import java.io.*;
 import java.util.Objects;
 import javax.net.ssl.*;
 
+import static chatServer.Cookies.getCookie;
+
 public class ChatThread extends Thread {
     private SSLSocket sslSocket;
     private boolean isAuthenticated = false; // Authenticated state
@@ -50,9 +52,19 @@ public class ChatThread extends Thread {
                         break;
                     // loginCookie(String value)
                     case ("LOGIN_COOKIE"):
+                        String[] loginCredentials = command[1].split(" ");
+                        String cookie = loginCredentials[0];
+
+                        output = loginCookie(cookie);
                         break;
                     // register(String username, String telephone, String password)
                     case ("REGISTER"):
+                        String[] registerCredentials = command[1].split(" ");
+                        String registerUserName = registerCredentials[0];
+                        String registerPassword = registerCredentials[1];
+                        String registerTelephone = registerCredentials[2];
+
+                        output = register(registerUserName, registerPassword, registerTelephone );
                         break;
                     // getMessages()
                     case ("GET_MESSAGES"):
@@ -103,7 +115,7 @@ public class ChatThread extends Thread {
             isAdmin = true;
         }
 
-        String sessionCookie = Cookies.getCookie();
+        String sessionCookie = getCookie();
         DBConnect.createSession(user.getId(), sessionCookie);
         return "OK;" + user.getUsername() + " " +
                 user.getTelephone() + " " +
@@ -115,18 +127,43 @@ public class ChatThread extends Thread {
     // Output:
     // OK; USERNAME TELEPHONE IS_ADMIN SESSION_COOKIE
     // INCORRECT_COOKIE;
-    private String loginCookie(String value) {
-        return null;
+    private String loginCookie(String value)
+    {
+        User user = DBConnect.checkSession(value);
+        if (Objects.isNull(user))
+            return "INVALID_CREDENTIALS;";
+        if (user.getIsAdmin() == 1)
+            isAdmin = true;
+        return "OK; " + user.getUsername() + " " +
+                user.getTelephone()+ " " +
+                isAdmin + " " +
+                value;
     }
 
     // Input:
     // REGISTER;USERNAME TELEPHONE PASSWORD
     // Output:
-    // OK;USERNAME TELEPHONE IS_ADMIN
+    // OK;
     // INVALID_USERNAME;
     // INCORRECT_TELEPHONE;
     private String register(String username, String telephone, String password) {
-        return null;
+        String passwordHash = PasswordHash.getPasswordHash(password);
+        try
+        {
+            String correctTelephone = Telephone.processTelephone(telephone);
+        }
+        catch (IncorrectTelephoneException ex)
+        {
+            return "INCORRECT_TELEPHONE;";
+        }
+        DBConnect.createUser(username, telephone, passwordHash);
+        User user = DBConnect.getUser(username);
+        if (Objects.isNull(user)) {
+            return "INVALID_USERNAME;";
+        }
+
+        return "OK;";
+
     }
 
     // AUTHENTICATED only functions:
