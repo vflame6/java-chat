@@ -66,6 +66,9 @@ public class ChatThread extends Thread {
 
                         output = register(registerUserName, registerPassword, registerTelephone );
                         break;
+                    // logout("String cookieValue")
+                    case ("LOGOUT"):
+                        break;
                     // getMessages()
                     case ("GET_MESSAGES"):
                         break;
@@ -148,12 +151,9 @@ public class ChatThread extends Thread {
     // INCORRECT_TELEPHONE;
     private String register(String username, String telephone, String password) {
         String passwordHash = PasswordHash.getPasswordHash(password);
-        try
-        {
+        try {
             String correctTelephone = Telephone.processTelephone(telephone);
-        }
-        catch (IncorrectTelephoneException ex)
-        {
+        } catch (IncorrectTelephoneException ex) {
             return "INCORRECT_TELEPHONE;";
         }
 
@@ -161,27 +161,37 @@ public class ChatThread extends Thread {
         if (!Objects.isNull(user)) {
             return "INVALID_USERNAME;";
         }
+
         DBConnect.createUser(username, telephone, passwordHash);
-
         return "OK;";
-
     }
 
     // AUTHENTICATED only functions:
     // without AUTHENTICATED returns AUTHENTICATION_REQUIRED;
 
     // Input:
+    // LOGOUT;COOKIE_VALUE
+    // OUTPUT:
+    // OK;
+    // Удалить из базы значение сессии
+    private String logout(String cookieValue) {
+        return null;
+    }
+
+    // Input:
     // GET_MESSAGES;
     // Output:
-    // OK;[MESSAGE1, MESSAGE2, ...]
+    // OK;BASE64_ENCODED_LIST<MESSAGE>
+    // Перед отправкой нужно расшифровать сообщения из базы
     private String getMessages() {
         return null;
     }
 
     // Input:
-    // SEND_MESSAGE;MESSAGE
+    // SEND_MESSAGE;BASE64_ENCODED_MESSAGE
     // Output:
     // OK;MESSAGE_ID
+    // Сообщения должны передаваться в базу в зашифрованном виде
     private String sendMessage(String from, String content) {
         return null;
     }
