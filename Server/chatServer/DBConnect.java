@@ -37,15 +37,12 @@ public class DBConnect {
                 "username text NOT NULL,\n" +
                 "telephone text NOT NULL,\n" +
                 "passwordHash text,\n" +
-                "isAdmin integer\n" +
+                "isAdmin integer DEFAULT 0\n" +
                 ");";
         try (Connection connection = getConnection()) {
             Statement statement = connection.createStatement();
             statement.execute(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
     }
@@ -60,9 +57,7 @@ public class DBConnect {
         try (Connection connection = getConnection()) {
             Statement statement = connection.createStatement();
             statement.execute(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
     }
@@ -78,9 +73,7 @@ public class DBConnect {
         try(Connection connection = getConnection()) {
             Statement statement = connection.createStatement();
             statement.execute(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
     }
@@ -92,10 +85,7 @@ public class DBConnect {
             Statement statement = connection.createStatement();
 
             statement.executeUpdate(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
     }
@@ -109,10 +99,7 @@ public class DBConnect {
             preparedStatement.setString(2, telephone);
             preparedStatement.setString(3, passwordHash);
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
     }
@@ -133,9 +120,7 @@ public class DBConnect {
 
                 return new User(id, username, telephone, passwordHash, isAdmin);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
         return null;
@@ -158,9 +143,7 @@ public class DBConnect {
 
                 return new User(id, username, telephone, passwordHash, isAdmin);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
         return null;
@@ -184,10 +167,7 @@ public class DBConnect {
 
                 return new User(id, username, telephone, passwordHash, isAdmin);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
         return null;
@@ -211,22 +191,22 @@ public class DBConnect {
                 User user = new User(id, username, telephone, passwordHash, isAdmin);
                 result.add(user);
             }
-        } catch (SQLException e) {}
-        catch (ClassNotFoundException e) {}
-
+        } catch (ClassNotFoundException | SQLException e) {}
         return result;
     }
 
-    public static void createMessage(String from, String content) {
-        String sql = "INSERT INTO mails(fromUser, content) VALUES (?,?)";
+    public static void createMessage(String from, String content, Timestamp date) {
+        String sql = "INSERT INTO mails(fromUser, content, time) VALUES (?,?,?)";
 
         try (Connection connection = getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, from);
             preparedStatement.setString(2, content);
+            preparedStatement.setTimestamp(3, date);
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {}
-        catch (ClassNotFoundException e) {};
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static List<Message> getAllMessages() {
@@ -241,15 +221,12 @@ public class DBConnect {
                 int id = resultSet.getInt(1);
                 String from = resultSet.getString(2);
                 String content = resultSet.getString(3);
-                Timestamp dateTimestamp = resultSet.getTimestamp(4);
+                Timestamp date = resultSet.getTimestamp(4);
 
-                Message message = new Message(id, from, content, dateTimestamp);
+                Message message = new Message(id, from, content, date);
                 result.add(message);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
         return result;
@@ -263,9 +240,7 @@ public class DBConnect {
             preparedStatement.setInt(1, userId);
             preparedStatement.setString(2, value);
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
     }
@@ -287,11 +262,10 @@ public class DBConnect {
                     return getUser(userId);
                 } else {
                     deleteSession(value);
+                    return null;
                 }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
         return null;
@@ -304,9 +278,7 @@ public class DBConnect {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, value);
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
     }
