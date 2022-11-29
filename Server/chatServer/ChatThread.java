@@ -42,8 +42,8 @@ public class ChatThread extends Thread implements ChatCommands {
                     // login(String username, String password)
                     case ("LOGIN"):
                         String[] credentials = command[1].split(" ");
-                        String username = credentials[1];
-                        String password = credentials[2];
+                        String username = credentials[0];
+                        String password = credentials[1];
                         login(username, password);
                         break;
                     // loginCookie(String value)
