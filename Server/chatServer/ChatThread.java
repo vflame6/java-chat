@@ -62,6 +62,9 @@ public class ChatThread extends Thread implements ChatCommands {
                         break;
                     // logout("String cookieValue")
                     case ("LOGOUT"):
+                        String[] logoutCredentials = command[1].split(" ");
+                        String logoutCookie = logoutCredentials[0];
+                        logout(logoutCookie);
                         break;
                     // getMessages()
                     case ("GET_MESSAGES"):
@@ -184,6 +187,16 @@ public class ChatThread extends Thread implements ChatCommands {
     // AUTHENTICATION_REQUIRED;
     // Удалить из базы значение сессии
     public boolean logout(String cookieValue) throws IOException {
+        String output;
+        User user = DBConnect.checkSession(cookieValue);
+        if (Objects.isNull(user)) {
+            output = "INVALID_COOKIE;\n";
+            out.write(output.getBytes());
+            return false;
+        }
+        DBConnect.deleteSession(cookieValue);
+        output = "OK;\n";
+        out.write(output.getBytes());
         return true;
     }
 
