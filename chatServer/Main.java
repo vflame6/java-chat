@@ -26,6 +26,7 @@ public class Main {
         List<Message> decodedMessages = Message.decodeMessages(encodedMessages);
         System.out.println("Decoded list of messages: " + decodedMessages);
         System.out.println(messageList.equals(decodedMessages));
+        System.out.println(DBConnect.getUser(1));
     }
 }
 
