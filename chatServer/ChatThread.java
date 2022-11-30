@@ -5,13 +5,13 @@ import java.util.Objects;
 import javax.net.ssl.*;
 
 public class ChatThread extends Thread implements ChatCommands {
-    private SSLSocket sslSocket;
+    private final SSLSocket sslSocket;
     private InputStream SSLSocketInputStream = null;
     private BufferedReader inp = null;
     private DataOutputStream out = null;
     private boolean isAuthenticated = false; // Authenticated state
     private boolean isAdmin = false; // Admin state
-    private static ServerCookies serverCookies = new ServerCookies();
+    private static final ServerCookies serverCookies = new ServerCookies();
 
     public ChatThread(SSLSocket sslSocket) {
         this.sslSocket = sslSocket;
@@ -32,6 +32,7 @@ public class ChatThread extends Thread implements ChatCommands {
             try {
                 line = inp.readLine();
                 System.out.println(line);
+                ChatLogger.logAccess(sslSocket.getInetAddress(), line);
                 String[] command = line.split(";");
 
                 switch (command[0]) {
