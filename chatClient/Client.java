@@ -63,10 +63,11 @@ public class Client {
         try {
             out.write(command.getBytes());
             String result = inp.readLine();
+            int len=result.split(" ").length;
             if (result.equals("INVALID_CREDENTIALS;")) {
                 throw new InvalidCredentials(username + password);
             } else {
-                String cookie = (result.split(" ")[-1]);
+                String cookie = ((result.split(" "))[len-1]);
                 clientCookies.createCookie(cookie);
                 from = username;
                 return true;
@@ -134,16 +135,17 @@ public class Client {
         }
     }
 
-    public boolean getMessages() {
+    public String getMessages() {
         String command ="GET_MESSAGES;"+"\n";
         try {
             out.write(command.getBytes());
             String result = inp.readLine();
             if (result.equals("OK;\n")){
-                return true;
+
+                return result;
             }
             else {
-                return false;
+                return "AUTHENTICATION_REQUIRED;";
             }
         } catch (IOException e) {
             e.printStackTrace();
