@@ -1,4 +1,4 @@
-package chatServer;
+package chat.Main;
 
 import java.io.*;
 import java.sql.Timestamp;
@@ -79,9 +79,8 @@ public class Message implements Serializable {
             ObjectOutputStream oos = new ObjectOutputStream(baos);
             oos.writeObject(this);
             oos.close();
-        }
-        catch(Exception e) {
-            System.out.println(e);
+        } catch(Exception e) {
+            e.printStackTrace();
         }
         return Base64.getEncoder().encodeToString(baos.toByteArray());
     }
@@ -107,8 +106,7 @@ public class Message implements Serializable {
             InputStream in = new ByteArrayInputStream(base64DecodedBytes);
             ObjectInputStream obin = new ObjectInputStream(in);
             Object object = obin.readObject();
-            Message message = (Message) object;
-            return message;
+            return (Message) object;
         } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
             return null;
@@ -122,8 +120,7 @@ public class Message implements Serializable {
             InputStream in = new ByteArrayInputStream(base64DecodedBytes);
             ObjectInputStream obin = new ObjectInputStream(in);
             Object object = obin.readObject();
-            List<Message> messageList = (ArrayList<Message>) object;
-            return messageList;
+            return (List<Message>) object;
         } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
             return null;

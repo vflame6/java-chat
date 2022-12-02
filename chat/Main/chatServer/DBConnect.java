@@ -1,4 +1,4 @@
-package chatServer;
+package chat.Main.chatServer;
 
 import org.sqlite.SQLiteConfig;
 
@@ -6,6 +6,7 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import chat.Main.Message;
 
 public class DBConnect {
     private static final String DB_URL = "jdbc:sqlite:chatDatabase.db";
@@ -253,7 +254,7 @@ public class DBConnect {
 
     // Метод для получения списка всех сообщений
     public static List<Message> getAllMessages() {
-        String sql = "SELECT * FROM mails;";
+        String sql = "SELECT * FROM mails";
         List<Message> result = new ArrayList<>();
 
         try (Connection connection = getConnection()) {
@@ -273,6 +274,19 @@ public class DBConnect {
             e.printStackTrace();
         }
         return result;
+    }
+
+    // Метод для удаления сообщений из базы mails
+    public static void deleteMessage(int id) {
+        String sql = "DELETE FROM mails WHERE id = ?";
+
+        try (Connection connection = getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     // Метод для создания сессии в таблице sessions

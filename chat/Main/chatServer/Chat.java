@@ -1,4 +1,4 @@
-package chatServer;
+package chat.Main.chatServer;
 
 import java.io.IOException;
 import javax.net.ssl.*;

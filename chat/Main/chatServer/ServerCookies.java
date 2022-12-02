@@ -1,4 +1,6 @@
-package chatServer;
+package chat.Main.chatServer;
+
+import chat.Main.Cookies;
 
 import java.util.Random;
 

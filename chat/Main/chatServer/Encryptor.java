@@ -1,9 +1,10 @@
-package chatServer;
+package chat.Main.chatServer;
 
 import javax.crypto.Cipher;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,8 +17,8 @@ import java.util.Base64;
 public class Encryptor {
     private static final String publicKey = "encryption/public.key";
     private static final String privateKey = "encryption/private.key";
-    private PublicKey pub;
-    private PrivateKey pvt;
+    private final PublicKey pub;
+    private final PrivateKey pvt;
 
     public Encryptor() {
         pub = loadPublicKey();
@@ -42,13 +43,9 @@ public class Encryptor {
 
             System.err.println("Private key format: " + pvt.getFormat());
             System.err.println("Public key format: " + pub.getFormat());
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
     }
@@ -61,13 +58,9 @@ public class Encryptor {
             PKCS8EncodedKeySpec ks = new PKCS8EncodedKeySpec(bytes);
             KeyFactory kf = KeyFactory.getInstance("RSA");
             return kf.generatePrivate(ks);
-        } catch (IOException e) {
+        } catch (IOException | NoSuchAlgorithmException e) {
             e.printStackTrace();
-        }
-        catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        catch (InvalidKeySpecException e) {
+        } catch (InvalidKeySpecException e) {
             e.printStackTrace();
         }
         return null;
@@ -81,13 +74,9 @@ public class Encryptor {
             X509EncodedKeySpec ks = new X509EncodedKeySpec(bytes);
             KeyFactory kf = KeyFactory.getInstance("RSA");
             return kf.generatePublic(ks);
-        } catch (IOException e) {
+        } catch (IOException | NoSuchAlgorithmException e) {
             e.printStackTrace();
-        }
-        catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        catch (InvalidKeySpecException e) {
+        } catch (InvalidKeySpecException e) {
             e.printStackTrace();
         }
 
@@ -112,7 +101,7 @@ public class Encryptor {
     {
         return Base64.getEncoder().encodeToString(data);
     }
-    public String decodeMessage(String encMsg)
+    public String decryptMessage(String encMsg)
     {
         try {
             byte[] encMsgBytes = decodeData(encMsg);
@@ -120,7 +109,7 @@ public class Encryptor {
             cipher.init(Cipher.DECRYPT_MODE, pvt);
             byte[] decryptMsg = cipher.doFinal(encMsgBytes);
 
-            return new String(decryptMsg, "UTF-8");
+            return new String(decryptMsg, StandardCharsets.UTF_8);
         }
         catch (Exception e)
         {

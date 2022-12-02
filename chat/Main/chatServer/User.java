@@ -1,11 +1,11 @@
-package chatServer;
+package chat.Main.chatServer;
 
 public class User {
     private final int id;
-    private String username;
-    private String telephone;
-    private String passwordHash;
-    private int isAdmin;
+    private final String username;
+    private final String telephone;
+    private final String passwordHash;
+    private final int isAdmin;
 
     public User(int id, String name, String telephone, String passwordHash, int isAdmin) {
         this.id = id;

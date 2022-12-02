@@ -1,4 +1,4 @@
-package chatServer;
+package chat.Main.chatServer;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -13,21 +13,26 @@ public class ChatLogger {
 
     private ChatLogger() {}
 
-    public static void logMessage(Message message) {
+    public static void logMessage(String from, String content) {
         try (FileWriter fileWriter = new FileWriter(messageLogFile, true)) {
-            fileWriter.write(message.toString() + "\n");
+            LocalDateTime now = LocalDateTime.now();
+            fileWriter.write(now.format(format) +
+                    " " + from +
+                    " " + content +
+                    "\n");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void logAccess(InetAddress inetAddress, String command) {
+    public static void logAccess(InetAddress inetAddress, String fullCommand) {
         try (FileWriter fileWriter = new FileWriter(accessLogFile, true)) {
             LocalDateTime now = LocalDateTime.now();
+            String command = fullCommand.split(";")[0];
             fileWriter.write(now.format(format) +
                     " " + inetAddress.toString() +
-                    " " + command
-                    + "\n");
+                    " " + command +
+                    "\n");
         } catch (IOException e) {
             e.printStackTrace();
         }

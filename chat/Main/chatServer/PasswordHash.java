@@ -1,7 +1,8 @@
-package chatServer;
+package chat.Main.chatServer;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -9,13 +10,9 @@ public class PasswordHash {
     private PasswordHash() {}
 
     public static String getPasswordHash(String password) {
-        byte[] passwordBytes = new byte[0];
-        try {
-            passwordBytes = password.getBytes("UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
-        MessageDigest md = null;
+        byte[] passwordBytes;
+        passwordBytes = password.getBytes(StandardCharsets.UTF_8);
+        MessageDigest md;
         try {
             md = MessageDigest.getInstance("MD5");
         } catch (NoSuchAlgorithmException e) {
