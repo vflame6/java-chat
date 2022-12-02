@@ -1,10 +1,15 @@
 package chatServer;
 
+import chatServer.Message;
+
 import java.io.*;
+import java.sql.Timestamp;
+import java.util.List;
 import java.util.Objects;
 import javax.net.ssl.*;
 
 public class ChatThread extends Thread implements ChatCommands {
+
     private final SSLSocket sslSocket;
     private InputStream SSLSocketInputStream = null;
     private BufferedReader inp = null;
@@ -69,12 +74,21 @@ public class ChatThread extends Thread implements ChatCommands {
                         break;
                     // getMessages()
                     case ("GET_MESSAGES"):
+                        getMessages();
                         break;
                     // sendMessage(String from, String content)
                     case ("SEND_MESSAGE"):
+//                        var base64String = command[1];
+//                        var decodedMessage = Message.decodeMessage(base64String);
+//                        String from = decodedMessage.getFrom();
+//                        String content = decodedMessage.getContent();
+//                        sendMessage(from, content);
                         break;
                     // deleteMessage(int id)
                     case ("DELETE_MESSAGE"):
+                        String[] deleteMessagesCredentials = command[1].split(" ");
+                        int Id = Integer.parseInt(deleteMessagesCredentials[0]);
+                        deleteMessage(Id);
                         break;
                     // Command not exists:
                     // invalidCommand()
@@ -140,6 +154,7 @@ public class ChatThread extends Thread implements ChatCommands {
             out.write(output.getBytes());
             return false;
         }
+
         if (user.getIsAdmin() == 1) {
             isAdmin = true;
         }
@@ -188,6 +203,11 @@ public class ChatThread extends Thread implements ChatCommands {
     // AUTHENTICATION_REQUIRED;
     // Удалить из базы значение сессии
     public boolean logout(String cookieValue) throws IOException {
+        if(!isAuthenticated)
+        {
+            System.out.println("AUTHENTICATION_REQUIRED");
+            return false;
+        }
         String output;
         User user = DBConnect.checkSession(cookieValue);
         if (Objects.isNull(user)) {
@@ -208,6 +228,31 @@ public class ChatThread extends Thread implements ChatCommands {
     // AUTHENTICATION_REQUIRED;
     // Перед отправкой нужно расшифровать сообщения из базы
     public boolean getMessages() throws IOException {
+        if(!isAuthenticated)
+        {
+            System.out.println("AUTHENTICATION_REQUIRED");
+            return false;
+        }
+        String output;
+        Timestamp date = new Timestamp(System.currentTimeMillis());
+        var messages = DBConnect.getAllMessages();
+        if(messages.size() == 0)
+        {
+            return false;
+        }
+        List<Message> decodedMessages = null;
+        for(int i =0; i < messages.size(); i++)
+        {
+            var message = messages.get(i);
+            var content = message.getContent();
+            Encryptor enc = new Encryptor();
+            var decryptContent = enc.decodeMessage(content);
+            decodedMessages.add(new Message(message.getId(), message.getFrom(), decryptContent, date));
+        }
+
+        var base64String = Message.encodeMessages(decodedMessages);
+        output = "OK; " + base64String + "\n";
+        out.write(output.getBytes());
         return true;
     }
 
@@ -218,6 +263,18 @@ public class ChatThread extends Thread implements ChatCommands {
     // AUTHENTICATION_REQUIRED;
     // Сообщения должны передаваться в базу в зашифрованном виде
     public boolean sendMessage(String from, String content) throws IOException {
+        if(!isAuthenticated)
+        {
+            System.out.println("AUTHENTICATION_REQUIRED");
+            return false;
+        }
+        String output;
+        Timestamp date = new Timestamp(System.currentTimeMillis());
+        Encryptor enc = new Encryptor();
+        var encodedMessage = enc.encryptMessage(content);
+        DBConnect.createMessage(from, encodedMessage, date);
+        output = "OK;\n";
+        out.write(output.getBytes());
         return true;
     }
 
@@ -231,6 +288,26 @@ public class ChatThread extends Thread implements ChatCommands {
     // NO_ADMIN_RIGHTS;
     // NO_SUCH_MESSAGE;
     public boolean deleteMessage(int id) throws IOException {
+        if(!isAuthenticated)
+        {
+            System.out.println("AUTHENTICATION_REQUIRED");
+            return false;
+        }
+        if(!isAdmin)
+        {
+            System.out.println("NO_ADMIN_RIGHTS");
+            return false;
+        }
+        String output;
+        var message = DBConnect.getMessage(id);
+        if (message == null)
+        {
+            System.out.println("NO_SUCH_MESSAGE");
+            return false;
+        }
+        String command = String.format("DELETE FROM mails WHERE id=%d;", id);
+        output = "OK;\n";
+        out.write(output.getBytes());
         return true;
     }
 
