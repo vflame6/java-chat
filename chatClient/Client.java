@@ -46,6 +46,7 @@ public class Client {
         try {
             out.write(command.getBytes());
             String result = inp.readLine();
+            System.out.println(result);
             if (result.equals("PONG;")) {
                 return true;
             } else {
@@ -121,7 +122,7 @@ public class Client {
         try {
             out.write(command.getBytes());
             String result = inp.readLine();
-            if (result.equals("OK")){
+            if (result.equals("OK;\n")){
                 return true;
             }
             else {
@@ -133,12 +134,41 @@ public class Client {
         }
     }
 
-    public void getMessages() {
+    public boolean getMessages() {
+        String command ="GET_MESSAGES;"+"\n";
+        try {
+            out.write(command.getBytes());
+            String result = inp.readLine();
+            if (result.equals("OK;\n")){
+                return true;
+            }
+            else {
+                return false;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+
 
     }
 
-    public void deleteMessage() {
+    public boolean deleteMessage(String id) {
+        String command ="DELETE_MESSAGE;"+id+" "+"\n";
+        try {
+            out.write(command.getBytes());
+            String result = inp.readLine();
+            if (result.equals("OK;\n")){
+                return true;
+            }
+            else {
+                return false;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
 
+    }
     }
 
     public boolean sendMessage(String value) {
@@ -149,7 +179,7 @@ public class Client {
         try {
             out.write(command.getBytes());
             String result = inp.readLine();
-            if (result.equals("OK")){
+            if (result.equals("OK;\n")){
                 return true;
             }
             else {return false;}
