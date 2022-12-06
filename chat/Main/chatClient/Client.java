@@ -14,14 +14,15 @@ import javax.net.ssl.SSLSocketFactory;
 
 public class Client implements ChatCommands {
     private static final int port = 9000;
-    public static final ClientCookies clientCookies = new ClientCookies();
-    private InetAddress ip = null;
+    public final ClientCookies clientCookies = new ClientCookies();
+    private InetAddress ip;
     private SSLSocket sslSocket = null;
     private InputStream SSLSocketInputStream = null;
     private BufferedReader inp = null;
     private DataOutputStream out = null;
     public String username;
     public boolean isAdmin;
+    public Timestamp lastMessageTimestamp;
     public List<Message> messageList;
 
     public Client(String address) throws UnknownHostException {
@@ -64,6 +65,7 @@ public class Client implements ChatCommands {
 
     public boolean ping() {
         String command = "PING;" + "\n";
+
         try {
             out.write(command.getBytes());
             String result = inp.readLine();
@@ -76,6 +78,7 @@ public class Client implements ChatCommands {
 
     public boolean login(String username, String password) throws InvalidCredentialsException {
         String command = "LOGIN;" + username + " " + password + "\n";
+
         try {
             out.write(command.getBytes());
             String result = inp.readLine();
@@ -99,6 +102,7 @@ public class Client implements ChatCommands {
 
     public boolean loginCookie(String cookieValue) {
         String command = "LOGIN_COOKIE;" + cookieValue + "\n";
+
         try {
             out.write(command.getBytes());
             String result = inp.readLine();
@@ -121,6 +125,7 @@ public class Client implements ChatCommands {
 
     public boolean register(String username, String password, String telephone) {
         String command = "REGISTER;" + username + " " + password + " " + telephone + "\n";
+
         try {
             out.write(command.getBytes());
             String result = inp.readLine();
@@ -143,6 +148,7 @@ public class Client implements ChatCommands {
 
     public boolean logout(String cookieValue) {
         String command ="LOGOUT;" + cookieValue + "\n";
+
         try {
             out.write(command.getBytes());
             String result = inp.readLine();
@@ -164,14 +170,40 @@ public class Client implements ChatCommands {
         }
     }
 
+    public boolean getLastMessageTimestamp() {
+        String command = "GET_LAST_MESSAGE_TIMESTAMP;" + "\n";
+
+        try {
+            out.write(command.getBytes());
+            String result = inp.readLine();
+            String[] results = result.split(";");
+            String state = results[0];
+            if (state.equals("OK")) {
+                // OK;<LAST_MESSAGE_TIMESTAMP_STRING>
+                lastMessageTimestamp = Timestamp.valueOf(results[1]);
+                return true;
+            } else if (state.equals("AUTHENTICATION_REQUIRED")) {
+                // AUTHENTICATION_REQUIRED;
+                throw new AuthenticationRequiredException("No authentication");
+            } else {
+                // NO_MESSAGES;
+                return false;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
     public boolean getMessages() {
-        String command ="GET_MESSAGES;" + "\n";
+        String command = "GET_MESSAGES;" + "\n";
+
         try {
             out.write(command.getBytes());
             String[] results = inp.readLine().split(";");
             String state = results[0];
             if (state.equals("OK")) {
-                // OK
+                // OK;<BASE64_ENCODED_LIST<MESSAGE>>
                 String encodedMessages = results[1];
                 messageList = Message.decodeMessages(encodedMessages);
                 return true;
@@ -179,6 +211,7 @@ public class Client implements ChatCommands {
                 // AUTHENTICATION_REQUIRED;
                 throw new AuthenticationRequiredException("No authentication");
             } else {
+                // NO_MESSAGES;
                 return false;
             }
         } catch (IOException e) {
@@ -192,6 +225,7 @@ public class Client implements ChatCommands {
         Message message = new Message(0, username, content, date);
         String encoded_message = message.encodeMessage();
         String command = "SEND_MESSAGE;" + encoded_message + "\n";
+
         try {
             out.write(command.getBytes());
             String result = inp.readLine();
@@ -210,6 +244,7 @@ public class Client implements ChatCommands {
 
     public boolean deleteMessage(int id) {
         String command ="DELETE_MESSAGE;" + id + "\n";
+
         try {
             out.write(command.getBytes());
             String result = inp.readLine();

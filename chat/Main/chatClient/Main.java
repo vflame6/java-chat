@@ -8,6 +8,10 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
+// To launch:
+// Import libraries
+// javafx-sdk-19/lib
+// sqlite-jdbc-3.40.0.0.jar
 // VM options:
 // --module-path "\path\to\javafx-sdk-19\lib" --add-modules javafx.controls,javafx.fxml
 public class Main extends javafx.application.Application {

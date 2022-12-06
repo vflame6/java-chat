@@ -252,6 +252,28 @@ public class DBConnect {
         return null;
     }
 
+    // Метод для получения последнего сообщения в таблице mails
+    public static Message getLastMessage() {
+        String sql = "SELECT * FROM mails ORDER BY id DESC LIMIT 1";
+
+        try (Connection connection = getConnection()) {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            if (resultSet.next()) {
+                int id = resultSet.getInt(1);
+                String from = resultSet.getString(2);
+                String content = resultSet.getString(3);
+                Timestamp date = resultSet.getTimestamp(4);
+
+                return new Message(id, from, content, date);
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     // Метод для получения списка всех сообщений
     public static List<Message> getAllMessages() {
         String sql = "SELECT * FROM mails";

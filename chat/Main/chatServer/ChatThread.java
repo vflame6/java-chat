@@ -12,7 +12,6 @@ import chat.Main.InvalidTelephoneException;
 import chat.Main.Message;
 
 public class ChatThread extends Thread implements ChatCommands {
-
     private final SSLSocket sslSocket;
     private InputStream SSLSocketInputStream = null;
     private BufferedReader inp = null;
@@ -21,7 +20,6 @@ public class ChatThread extends Thread implements ChatCommands {
     private boolean isAdmin = false; // Admin state
     private static final ServerCookies serverCookies = new ServerCookies();
     private static final Encryptor encryptor = new Encryptor();
-
     public ChatThread(SSLSocket sslSocket) {
         this.sslSocket = sslSocket;
     }
@@ -40,7 +38,7 @@ public class ChatThread extends Thread implements ChatCommands {
         while (true) {
             try {
                 line = inp.readLine();
-                System.out.println(line);
+                System.out.println(sslSocket.getInetAddress() + " " + line);
                 ChatLogger.logAccess(sslSocket.getInetAddress(), line);
                 String[] command = line.split(";");
 
@@ -74,6 +72,8 @@ public class ChatThread extends Thread implements ChatCommands {
                         String logoutCookie = command[1];
                         logout(logoutCookie);
                     }
+                    // getLastMessageTimestamp()
+                    case ("GET_LAST_MESSAGE_TIMESTAMP") -> getLastMessageTimestamp();
                     // getMessages()
                     case ("GET_MESSAGES") -> getMessages();
 
@@ -223,15 +223,42 @@ public class ChatThread extends Thread implements ChatCommands {
     }
 
     // Input:
+    // GET_LAST_MESSAGE_TIMESTAMP;
+    // OUTPUT:
+    // OK;<TIMESTAMP>
+    // AUTHENTICATION_REQUIRED;
+    // NO_MESSAGES;
+    public boolean getLastMessageTimestamp() throws IOException {
+        String output;
+        if (!isAuthenticated) {
+            output = "AUTHENTICATION_REQUIRED;\n";
+            out.write(output.getBytes());
+            return false;
+        }
+
+        Message lastMessage = DBConnect.getLastMessage();
+        if (Objects.isNull(lastMessage)) {
+            output = "NO_MESSAGES;\n";
+            out.write(output.getBytes());
+            return false;
+        }
+
+        Timestamp timestamp = lastMessage.getDate();
+        output = "OK;" + timestamp.toString() + "\n";
+        out.write(output.getBytes());
+        return true;
+    }
+
+    // Input:
     // GET_MESSAGES;
     // Output:
-    // OK;BASE64_ENCODED_LIST<MESSAGE>
+    // OK;<BASE64_ENCODED_LIST<MESSAGE>>
     // AUTHENTICATION_REQUIRED;
     // NO_MESSAGES;
     // Перед отправкой нужно расшифровать сообщения из базы
     public boolean getMessages() throws IOException {
         String output;
-        if(!isAuthenticated) {
+        if (!isAuthenticated) {
             output = "AUTHENTICATION_REQUIRED;\n";
             out.write(output.getBytes());
             return false;

@@ -27,8 +27,8 @@ public class ChatConnectController {
                 Client client = new Client(ip);
                 if (client.ping()) {
                     clientHolder.setClient(client);
-                    if (Client.clientCookies.isCookieExists()) {
-                        String cookie = Client.clientCookies.getCookie();
+                    if (client.clientCookies.isCookieExists()) {
+                        String cookie = client.clientCookies.getCookie();
                         if (client.loginCookie(cookie)) {
                             root = SceneChanger.changeScene("ChatChat.fxml");
                         } else {
