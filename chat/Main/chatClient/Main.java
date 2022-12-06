@@ -1,17 +1,28 @@
 package chat.Main.chatClient;
 
-public class Main {
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+
+// VM options:
+// --module-path "\path\to\javafx-sdk-19\lib" --add-modules javafx.controls,javafx.fxml
+public class Main extends javafx.application.Application {
+    public void start(Stage primaryStage) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        File file = new File("resources/ChatConnect.fxml");
+        URL url = new URL("file:/" + file.getAbsolutePath());
+        fxmlLoader.setLocation(url);
+        Scene scene = new Scene(fxmlLoader.load());
+        primaryStage.setTitle("KiChatApp");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
     public static void main(String[] args) {
-        Client client = new Client("localhost");
-        System.out.println(client.ping());
-        System.out.println(client.login("admin", "admin"));
-        System.out.println(Client.clientCookies.isCookieExists());
-        String cookie = Client.clientCookies.getCookie();
-        System.out.println(cookie);
-        System.out.println(client.sendMessage("It works!!!"));
-        System.out.println(client.getMessages());
-        System.out.println(client.messageList);
-        System.out.println(client.logout(cookie));
-        System.out.println(client.loginCookie("BAD_COOKIE"));
+        launch();
     }
 }
