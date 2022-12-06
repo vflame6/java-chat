@@ -85,7 +85,7 @@ public class Client implements ChatCommands {
                 String[] userData = result.split(";")[1]
                                 .split(" ");
                 this.username = userData[0];
-                isAdmin = Integer.parseInt(userData[1]) == 1;
+                isAdmin = Boolean.parseBoolean(userData[1]);
                 String cookie = userData[2];
                 clientCookies.createCookie(cookie);
                 return true;
@@ -110,7 +110,7 @@ public class Client implements ChatCommands {
                 String[] userData = result.split(";")[1]
                         .split(" ");
                 username = userData[0];
-                isAdmin = Integer.parseInt(userData[1]) == 1;
+                isAdmin = Boolean.parseBoolean(userData[1]);
                 return true;
             }
         } catch (IOException e) {

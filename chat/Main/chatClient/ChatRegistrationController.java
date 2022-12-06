@@ -36,23 +36,13 @@ public class ChatRegistrationController {
             Stage stage = (Stage) SignUpButton.getScene().getWindow();
             stage.close();
             Parent root = null;
-            try {
-                if (true) {
-                    File file = new File("resources/ChatChat.fxml");
-                    URL url1 = new URL("file:/" + file.getAbsolutePath());
-                    root = FXMLLoader.load(url1);
-                } else {
-                    File file = new File("resources/ChatRegistrationProblem.fxml");
-                    URL url2 = new URL("file:/" + file.getAbsolutePath());
-                    root = FXMLLoader.load(Objects.requireNonNull(url2));
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            if (true) {
+                root = SceneChanger.changeScene("ChatChat.fxml");
+            } else {
+                root = SceneChanger.changeScene("ChatRegistrationProblem.fxml");
             }
             stage.setScene(new Scene(root));
             stage.show();
-
         });
-
     }
 }

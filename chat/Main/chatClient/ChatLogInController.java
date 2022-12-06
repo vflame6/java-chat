@@ -34,19 +34,12 @@ public class ChatLogInController {
             Stage stage = (Stage) LogInButton.getScene().getWindow();
             stage.close();
             Parent root = null;
-            try {
-                if ((login.equals("nova")) && (password.equals("nova16"))) {
-                    File file = new File("resources/ChatChat.fxml");
-                    URL url1 = new URL("file:/" + file.getAbsolutePath());
-                    root = FXMLLoader.load(Objects.requireNonNull(url1));
-                } else {
-                    File file = new File("resources/ChatLogInProblem.fxml");
-                    URL url2 = new URL("file:/" + file.getAbsolutePath());
-                    root = FXMLLoader.load(Objects.requireNonNull(url2));
-                }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            if ((login.equals("nova")) && (password.equals("nova16"))) {
+                root = SceneChanger.changeScene("ChatChat.fxml");
+            } else {
+                root = SceneChanger.changeScene("ChatLogInProblem.fxml");
             }
+
             stage.setScene(new Scene(root));
             stage.show();
         });
@@ -55,13 +48,7 @@ public class ChatLogInController {
             Stage stage = (Stage) SignUpButton.getScene().getWindow();
             stage.close();
             Parent root = null;
-            try{
-                File file = new File("resources/ChatRegistration.fxml");
-                URL url = new URL("file:/" + file.getAbsolutePath());
-                root = FXMLLoader.load(Objects.requireNonNull(url));
-            } catch (IOException e){
-                throw new RuntimeException(e);
-            }
+            root = SceneChanger.changeScene("ChatRegistration.fxml");
             stage.setScene(new Scene(root));
             stage.show();
         });

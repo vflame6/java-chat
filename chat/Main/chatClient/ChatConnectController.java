@@ -1,7 +1,6 @@
 package chat.Main.chatClient;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -9,10 +8,6 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.net.UnknownHostException;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.Objects;
 
 public class ChatConnectController {
     ClientHolder clientHolder = ClientHolder.getInstance();
@@ -27,30 +22,26 @@ public class ChatConnectController {
             ip = IPString.getText();
             Stage stage = (Stage) ConnectButton.getScene().getWindow();
             Parent root = null;
+
             try {
                 Client client = new Client(ip);
                 if (client.ping()) {
                     clientHolder.setClient(client);
-                    try {
-                        File file = new File("resources/ChatLogIn.fxml");
-                        URL url1 = new URL("file:/" + file.getAbsolutePath());
-                        root = FXMLLoader.load(Objects.requireNonNull(url1));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        throw new RuntimeException(e);
+                    if (Client.clientCookies.isCookieExists()) {
+                        String cookie = Client.clientCookies.getCookie();
+                        if (client.loginCookie(cookie)) {
+                            root = SceneChanger.changeScene("ChatChat.fxml");
+                        } else {
+                            root = SceneChanger.changeScene("ChatLogIn.fxml");
+                        }
+                    } else {
+                        root = SceneChanger.changeScene("ChatLogIn.fxml");
                     }
                 } else {
                     throw new UnknownHostException();
                 }
             } catch (UnknownHostException e) {
-                try {
-                    File file = new File("resources/ChatConnectProblem.fxml");
-                    URL url2 = new URL("file:/" + file.getAbsolutePath());
-                    root = FXMLLoader.load(Objects.requireNonNull(url2));
-                } catch (IOException exception2) {
-                    exception2.printStackTrace();
-                    throw new RuntimeException(exception2);
-                }
+                root = SceneChanger.changeScene("ChatConnectProblem.fxml");
             }
 
             stage.close();

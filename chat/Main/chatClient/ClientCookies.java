@@ -14,18 +14,18 @@ public class ClientCookies implements Cookies {
     }
 
     public String getCookie(){
-            try {
-                FileReader cookieFile = new FileReader("cookie.txt");
-                char[] buffer = new char[8096];
-                int chars = cookieFile.read(buffer);
-                String cookie = "";
-                while (chars != -1) {
-                    cookie += (String.valueOf(buffer, 0, chars));
-                    chars = cookieFile.read(buffer);
-                }
+        try {
+            FileReader cookieFile = new FileReader("cookie.txt");
+            char[] buffer = new char[8096];
+            int chars = cookieFile.read(buffer);
+            String cookie = "";
 
-                cookieFile.close();
-                return cookie;
+            while (chars != -1) {
+                cookie += (String.valueOf(buffer, 0, chars));
+                chars = cookieFile.read(buffer);
+            }
+            cookieFile.close();
+            return cookie;
         } catch (IOException e) {
                 e.printStackTrace();
                 throw new RuntimeException(e);
