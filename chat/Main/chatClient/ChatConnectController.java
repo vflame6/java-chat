@@ -8,12 +8,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.net.UnknownHostException;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
 
 public class ChatConnectController {
+    ClientHolder clientHolder = ClientHolder.getInstance();
     @FXML
     private Button ConnectButton;
     @FXML
@@ -24,22 +26,34 @@ public class ChatConnectController {
         ConnectButton.setOnAction((event) -> {
             ip = IPString.getText();
             Stage stage = (Stage) ConnectButton.getScene().getWindow();
-            stage.close();
             Parent root = null;
             try {
-                if (ip.equals("858545")) {
-                    File file = new File("resources/ChatLogIn.fxml");
-                    URL url1 = new URL("file:/" + file.getAbsolutePath());
-                    root = FXMLLoader.load(Objects.requireNonNull(url1));
+                Client client = new Client(ip);
+                if (client.ping()) {
+                    clientHolder.setClient(client);
+                    try {
+                        File file = new File("resources/ChatLogIn.fxml");
+                        URL url1 = new URL("file:/" + file.getAbsolutePath());
+                        root = FXMLLoader.load(Objects.requireNonNull(url1));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        throw new RuntimeException(e);
+                    }
                 } else {
+                    throw new UnknownHostException();
+                }
+            } catch (UnknownHostException e) {
+                try {
                     File file = new File("resources/ChatConnectProblem.fxml");
                     URL url2 = new URL("file:/" + file.getAbsolutePath());
                     root = FXMLLoader.load(Objects.requireNonNull(url2));
+                } catch (IOException exception2) {
+                    exception2.printStackTrace();
+                    throw new RuntimeException(exception2);
                 }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
             }
 
+            stage.close();
             stage.setScene(new Scene(root));
             stage.show();
         });

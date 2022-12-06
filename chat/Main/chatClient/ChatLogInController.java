@@ -14,6 +14,7 @@ import java.net.URL;
 import java.util.Objects;
 
 public class ChatLogInController {
+    Client client = ClientHolder.getInstance().getClient();
     @FXML
     private Button LogInButton;
     @FXML
@@ -26,7 +27,7 @@ public class ChatLogInController {
     private String password;
 
     @FXML
-    void initialize(){
+    void initialize() {
         LogInButton.setOnAction((event) -> {
             login = LoginString.getText();
             password = PasswordString.getText();

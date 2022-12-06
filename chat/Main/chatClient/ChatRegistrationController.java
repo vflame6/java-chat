@@ -14,6 +14,7 @@ import java.net.URL;
 import java.util.Objects;
 
 public class ChatRegistrationController {
+    Client client = ClientHolder.getInstance().getClient();
     @FXML
     private TextField LoginString;
     @FXML

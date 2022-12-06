@@ -24,7 +24,7 @@ public class Client implements ChatCommands {
     public boolean isAdmin;
     public List<Message> messageList;
 
-    public Client(String address) {
+    public Client(String address) throws UnknownHostException {
         System.setProperty("javax.net.ssl.trustStore", "encryption/TrustStore.jts");
         System.setProperty("javax.net.ssl.trustStorePassword", "123456");
         SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
@@ -33,6 +33,7 @@ public class Client implements ChatCommands {
             ip = InetAddress.getByName(address);
         } catch (UnknownHostException e) {
             e.printStackTrace();
+            throw e;
         }
 
         try {
@@ -45,6 +46,20 @@ public class Client implements ChatCommands {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "ip=" + ip +
+                ", sslSocket=" + sslSocket +
+                ", SSLSocketInputStream=" + SSLSocketInputStream +
+                ", inp=" + inp +
+                ", out=" + out +
+                ", username='" + username + '\'' +
+                ", isAdmin=" + isAdmin +
+                ", messageList=" + messageList +
+                '}';
     }
 
     public boolean ping() {
