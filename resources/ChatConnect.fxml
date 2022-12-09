@@ -6,27 +6,41 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="800.0" style="-fx-background-color: DCEBE5;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chat.Main.chatClient.ChatConnectController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="800.0" style="-fx-background-color: #D1E8E2; -fx-background-radius: 10;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chat.Main.chatClient.ChatConnectController">
    <children>
-      <AnchorPane prefHeight="175.0" prefWidth="800.0" style="-fx-background-color: #1F5E45;">
+      <AnchorPane prefHeight="175.0" prefWidth="800.0" style="-fx-background-color: #116466; -fx-background-radius: 5;" AnchorPane.bottomAnchor="374.8" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label layoutX="281.0" layoutY="40.0" prefHeight="96.0" prefWidth="237.0" text="KiChat" textFill="#eaffe9">
+            <AnchorPane layoutX="136.0" layoutY="4.0" prefHeight="166.0" prefWidth="527.0" style="-fx-border-color: #D9B08C; -fx-border-width: 5;" AnchorPane.leftAnchor="136.0" AnchorPane.topAnchor="4.0">
+               <children>
+                  <Label layoutX="140.0" layoutY="32.0" prefHeight="102.0" prefWidth="248.0" style="-fx-border-color: #D9B08C; -fx-border-width: 3;" text="KiChat" textAlignment="CENTER" textFill="#d9b08c" AnchorPane.leftAnchor="137.0" AnchorPane.rightAnchor="137.0" AnchorPane.topAnchor="30.0">
+                     <font>
+                        <Font name="Californian FB" size="80.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutY="263.0" prefHeight="200.0" prefWidth="800.0" style="-fx-background-color: #116466; -fx-background-radius: 5;" AnchorPane.bottomAnchor="87.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="263.0" />
+      <AnchorPane layoutX="187.0" layoutY="222.0" prefHeight="281.0" prefWidth="426.0" style="-fx-background-color: #D9B08C; -fx-background-radius: 10; -fx-border-color: #116466; -fx-border-width: 5; -fx-border-radius: 5;">
+         <children>
+            <Button fx:id="connectButton" ellipsisString="" layoutX="102.0" layoutY="207.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="222.0" style="-fx-background-radius: 80; -fx-background-color: #D1E8E2; -fx-border-width: 3; -fx-border-color: #116466; -fx-border-radius: 80;" text="Connect" textFill="#116466">
                <font>
-                  <Font name="Californian FB" size="80.0" />
+                  <Font name="Calisto MT" size="26.0" />
+               </font>
+            </Button>
+            <TextField fx:id="ipString" layoutX="48.0" layoutY="119.0" prefHeight="42.0" prefWidth="330.0" promptText="IP address..." style="-fx-background-radius: 5; -fx-background-color: #D1E8E2;">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </TextField>
+            <Label fx:id="connectString" layoutX="17.0" layoutY="37.0" prefHeight="42.0" prefWidth="392.0" style="-fx-background-color: #116466; -fx-background-radius: 10;" text=" Пожалуйста, введите IP адресс для подключения к серверу" textAlignment="CENTER" textFill="#d9b08c">
+               <font>
+                  <Font name="Calisto MT" size="14.0" />
                </font>
             </Label>
          </children>
       </AnchorPane>
-      <TextField fx:id="IPString" layoutX="235.0" layoutY="296.0" prefHeight="42.0" prefWidth="330.0" promptText="IP address..." style="-fx-background-radius: 5;" />
-      <Button fx:id="ConnectButton" layoutX="289.0" layoutY="363.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="222.0" style="-fx-background-radius: 5;" text="Connect" textFill="#225922">
-         <font>
-            <Font name="Calisto MT" size="24.0" />
-         </font>
-      </Button>
-      <Label layoutX="211.0" layoutY="232.0" prefHeight="42.0" prefWidth="372.0" style="-fx-background-color: #D5E1DC; -fx-background-radius: 10;" text="       Пожалуйста, введите IP адресс для подключения к серверу" textAlignment="CENTER" textFill="#697e62">
-         <font>
-            <Font name="Calisto MT" size="12.0" />
-         </font>
-      </Label>
    </children>
 </AnchorPane>
+

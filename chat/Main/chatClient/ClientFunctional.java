@@ -83,7 +83,7 @@ public class ClientFunctional implements ChatCommands {
             out.write(command.getBytes());
             String result = inp.readLine();
             if (result.equals("INVALID_CREDENTIALS;")) {
-                throw new InvalidCredentialsException("Invalid credentials");
+                return false;
             } else {
                 String[] userData = result.split(";")[1]
                                 .split(" ");
@@ -131,7 +131,7 @@ public class ClientFunctional implements ChatCommands {
             String result = inp.readLine();
             if (result.equals("INVALID_USERNAME;")) {
                 // INVALID_USERNAME;
-                throw new InvalidCredentialsException(username);
+                return false;
             }
             if (result.equals("INCORRECT_TELEPHONE;")) {
                 // INCORRECT_TELEPHONE;

@@ -165,7 +165,7 @@ public class ChatThread extends Thread implements ChatCommands {
     // OK;
     // INVALID_USERNAME;
     // INCORRECT_TELEPHONE;
-    public boolean register(String username, String telephone, String password) throws IOException {
+    public boolean register(String username, String password, String telephone) throws IOException {
         String output;
         String passwordHash = PasswordHash.getPasswordHash(password);
         String correctTelephone;

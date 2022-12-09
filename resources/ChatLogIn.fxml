@@ -1,39 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="800.0" style="-fx-background-color: DCEBE5;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chat.Main.chatClient.ChatLogInController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="800.0" style="-fx-background-color: #D1E8E2; -fx-background-radius: 10;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chat.Main.chatClient.ChatLogInController">
    <children>
-      <AnchorPane prefHeight="175.0" prefWidth="800.0" style="-fx-background-color: #1F5E45;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane prefHeight="174.0" prefWidth="800.0" style="-fx-background-color: #116466; -fx-background-radius: 5;" AnchorPane.bottomAnchor="374.8" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label layoutX="319.0" layoutY="138.0" text="Authorization" textFill="#eaffe9" AnchorPane.leftAnchor="320.0" AnchorPane.topAnchor="140.0">
+            <AnchorPane layoutX="136.0" prefHeight="166.0" prefWidth="527.0" style="-fx-border-color: #D9B08C; -fx-border-width: 5;">
+               <children>
+                  <Label layoutX="192.0" layoutY="135.0" text="Authotization" textFill="#d9b08c">
+                     <font>
+                        <Font name="Calisto MT" size="24.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="138.0" layoutY="34.0" prefHeight="107.0" prefWidth="250.0" style="-fx-border-color: #D9B08C; -fx-border-width: 3;" text="KiChat" textAlignment="CENTER" textFill="#d9b08c" AnchorPane.leftAnchor="138.0">
+                     <font>
+                        <Font name="Californian FB" size="80.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutY="263.0" prefHeight="200.0" prefWidth="800.0" style="-fx-background-color: #116466; -fx-background-radius: 5;" AnchorPane.bottomAnchor="87.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="263.0" />
+      <AnchorPane layoutX="187.0" layoutY="222.0" prefHeight="281.0" prefWidth="426.0" style="-fx-background-color: #D9B08C; -fx-background-radius: 10; -fx-border-color: #116466; -fx-border-width: 5; -fx-border-radius: 5;">
+         <children>
+            <Button fx:id="logInButton" ellipsisString="" layoutX="39.0" layoutY="203.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="173.0" style="-fx-background-radius: 80; -fx-background-color: #D1E8E2; -fx-border-width: 3; -fx-border-color: #116466; -fx-border-radius: 80;" text="Log in" textFill="#116466">
                <font>
-                  <Font name="Californian FB" size="28.0" />
+                  <Font name="Calisto MT" size="26.0" />
                </font>
-            </Label>
-            <Label layoutX="281.0" layoutY="57.0" prefHeight="97.0" prefWidth="237.0" text="KiChat" textFill="#eaffe9" AnchorPane.leftAnchor="281.0" AnchorPane.topAnchor="57.0">
+            </Button>
+            <Button fx:id="signUpButton" ellipsisString="" layoutX="231.0" layoutY="203.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="173.0" style="-fx-background-radius: 80; -fx-background-color: #D1E8E2; -fx-border-width: 3; -fx-border-color: #116466; -fx-border-radius: 80;" text="Sign up" textFill="#116466">
                <font>
-                  <Font name="Californian FB" size="80.0" />
+                  <Font name="Calisto MT" size="26.0" />
+               </font>
+            </Button>
+            <TextField fx:id="loginString" layoutX="47.0" layoutY="80.0" prefHeight="42.0" prefWidth="330.0" promptText="Login..." style="-fx-background-radius: 5; -fx-background-color: #D1E8E2;">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </TextField>
+            <PasswordField fx:id="passwordString" layoutX="48.0" layoutY="141.0" prefHeight="42.0" prefWidth="330.0" promptText="Password..." style="-fx-background-color: #D1E8E2; -fx-background-radius: 5;">
+               <font>
+                  <Font size="14.0" />
+               </font></PasswordField>
+            <Label fx:id="problemString" layoutX="17.0" layoutY="22.0" prefHeight="42.0" prefWidth="392.0" style="-fx-background-color: #116466; -fx-background-radius: 10;" text="                    Введите логин и парль для авторизации" textFill="#d9b08c">
+               <font>
+                  <Font name="Calisto MT" size="14.0" />
                </font>
             </Label>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="200.0" layoutY="237.0" prefHeight="170.0" prefWidth="400.0" style="-fx-background-color: #BDDBC6;" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="240.0">
-         <children>
-            <TextField fx:id="PasswordString" layoutX="35.0" layoutY="100.0" prefHeight="40.0" prefWidth="330.0" promptText="Password..." style="-fx-background-radius: 5;" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="100.0" />
-            <TextField fx:id="LoginString" layoutX="35.0" layoutY="30.0" prefHeight="40.0" prefWidth="330.0" promptText="Login..." style="-fx-background-radius: 5;" AnchorPane.leftAnchor="35.0" AnchorPane.topAnchor="30.0" />
-         </children>
-      </AnchorPane>
-      <Button fx:id="SignUpButton" layoutX="425.0" layoutY="440.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" style="-fx-background-radius: 5;" text="Sign up" textFill="#225922" AnchorPane.leftAnchor="425.0" AnchorPane.topAnchor="440.0">
-         <font>
-            <Font name="Calisto MT" size="26.0" />
-         </font>
-      </Button>
-      <Button fx:id="LogInButton" layoutX="225.0" layoutY="440.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" style="-fx-background-radius: 5;" text="Log in " textFill="#225922" AnchorPane.leftAnchor="225.0" AnchorPane.topAnchor="440.0">
+      <Button fx:id="backButton" ellipsisString="" layoutY="495.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="126.0" style="-fx-background-radius: 80; -fx-background-color: #D1E8E2; -fx-border-width: 3; -fx-border-color: #116466; -fx-border-radius: 80;" text="Back" textFill="#116466" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
          <font>
             <Font name="Calisto MT" size="26.0" />
          </font>
