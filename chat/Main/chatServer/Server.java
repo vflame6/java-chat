@@ -3,8 +3,8 @@ package chat.Main.chatServer;
 import java.io.IOException;
 import javax.net.ssl.*;
 
-public class Chat {
-    public static void main(String[] args) {
+public class Server {
+    public static void launchServer() {
         int port = 9000;
         System.setProperty("javax.net.ssl.keyStore","encryption/KeyStore1.jks");
         System.setProperty("javax.net.ssl.keyStorePassword","123456");

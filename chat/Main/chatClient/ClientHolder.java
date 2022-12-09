@@ -1,7 +1,7 @@
 package chat.Main.chatClient;
 
 public class ClientHolder {
-    private Client client;
+    private ClientFunctional clientFunctional;
     private final static ClientHolder INSTANCE = new ClientHolder();
 
     private ClientHolder() {}
@@ -10,12 +10,12 @@ public class ClientHolder {
         return INSTANCE;
     }
 
-    public void setClient(Client c) {
-        this.client = c;
+    public void setClient(ClientFunctional c) {
+        this.clientFunctional = c;
     }
 
-    public Client getClient() {
-        return this.client;
+    public ClientFunctional getClient() {
+        return this.clientFunctional;
     }
 }
 

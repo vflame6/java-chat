@@ -12,7 +12,7 @@ import java.util.List;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
-public class Client implements ChatCommands {
+public class ClientFunctional implements ChatCommands {
     private static final int port = 9000;
     public final ClientCookies clientCookies = new ClientCookies();
     private InetAddress ip;
@@ -25,7 +25,7 @@ public class Client implements ChatCommands {
     public Timestamp lastMessageTimestamp;
     public List<Message> messageList;
 
-    public Client(String address) throws UnknownHostException {
+    public ClientFunctional(String address) throws UnknownHostException {
         System.setProperty("javax.net.ssl.trustStore", "encryption/TrustStore.jts");
         System.setProperty("javax.net.ssl.trustStorePassword", "123456");
         SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();

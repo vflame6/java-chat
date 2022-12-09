@@ -24,12 +24,12 @@ public class ChatConnectController {
             Parent root = null;
 
             try {
-                Client client = new Client(ip);
-                if (client.ping()) {
-                    clientHolder.setClient(client);
-                    if (client.clientCookies.isCookieExists()) {
-                        String cookie = client.clientCookies.getCookie();
-                        if (client.loginCookie(cookie)) {
+                ClientFunctional clientFunctional = new ClientFunctional(ip);
+                if (clientFunctional.ping()) {
+                    clientHolder.setClient(clientFunctional);
+                    if (clientFunctional.clientCookies.isCookieExists()) {
+                        String cookie = clientFunctional.clientCookies.getCookie();
+                        if (clientFunctional.loginCookie(cookie)) {
                             root = SceneChanger.changeScene("ChatChat.fxml");
                         } else {
                             root = SceneChanger.changeScene("ChatLogIn.fxml");
