@@ -15,7 +15,7 @@ public class ClientCookies implements Cookies {
         return file.exists() && !file.isDirectory();
     }
 
-    // Прочитать куки из файла
+    // Прочитать куки из файла и вернуть строку содержащую куку
     public String getCookie(){
         try {
             FileReader cookieFile = new FileReader("cookie.txt");
