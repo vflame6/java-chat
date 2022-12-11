@@ -271,5 +271,17 @@ public class ClientFunctional implements ChatCommands {
     public boolean invalidCommand() {
         return true;
     }
+
+    public void closeConnection() {
+        try{
+            inp.close();
+            out.close();
+            sslSocket.close();
+            System.out.println("The Client is disconnected...");
+        } catch (IOException e) {
+            System.err.println("Socket not closed...");
+            e.printStackTrace();
+        }
+    }
 }
 

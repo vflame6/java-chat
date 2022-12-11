@@ -54,6 +54,7 @@ public class ChatLogInController {
         backButton.setOnAction((event) -> {
             Stage stage = (Stage) backButton.getScene().getWindow();
             stage.close();
+            clientFunctional.closeConnection();
             Parent root = null;
             root = SceneChanger.changeScene("ChatConnect.fxml");
             stage.setScene(new Scene(root));
