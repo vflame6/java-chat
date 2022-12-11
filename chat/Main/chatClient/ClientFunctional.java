@@ -22,6 +22,7 @@ public class ClientFunctional implements ChatCommands {
     private DataOutputStream out = null;
     public String username;
     public boolean isAdmin;
+    public String chatName;
     public Timestamp lastMessageTimestamp;
     public List<Message> messageList;
 
@@ -143,6 +144,54 @@ public class ClientFunctional implements ChatCommands {
         } catch (IOException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public boolean getConfig(int id) {
+        String command = "GET_CONFIG;" + id + "\n";
+
+        try {
+            out.write(command.getBytes());
+            String[] result = inp.readLine().split(";");
+
+            if (result[0].equals("OK")) {
+                // OK;<CHAT NAME>
+                chatName = result[1];
+                return true;
+            } else if (result[0].equals("AUTHENTICATION_REQUIRED")) {
+                // AUTHENTICATION_REQUIRED;
+                throw  new AuthenticationRequiredException("No authentication");
+            } else {
+                // NO_SUCH_CONFIG;
+                return false;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean updateConfig(int id, String chatName) {
+        String command = "UPDATE_CONFIG;" + id + " " + chatName + "\n";
+
+        try {
+            out.write(command.getBytes());
+            String result = inp.readLine();
+
+            if (result.equals("OK;")) {
+                // OK;
+                this.chatName = chatName;
+                return true;
+            } else if (result.equals("AUTHENTICATION_REQUIRED;")) {
+                // AUTHENTICATION_REQUIRED;
+                throw new AuthenticationRequiredException("No authentication");
+            } else {
+                // NO_SUCH_CONFIG;
+                return false;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -273,13 +322,11 @@ public class ClientFunctional implements ChatCommands {
     }
 
     public void closeConnection() {
-        try{
+        try {
             inp.close();
             out.close();
             sslSocket.close();
-            System.out.println("The Client is disconnected...");
         } catch (IOException e) {
-            System.err.println("Socket not closed...");
             e.printStackTrace();
         }
     }

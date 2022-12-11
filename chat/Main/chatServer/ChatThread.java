@@ -39,6 +39,10 @@ public class ChatThread extends Thread implements ChatCommands {
         while (true) {
             try {
                 line = inp.readLine();
+                if (Objects.isNull(line)) {
+                    throw new IOException();
+                }
+
                 System.out.println(sslSocket.getInetAddress() + " " + line);
                 ChatLogger.logAccess(sslSocket.getInetAddress(), line);
                 String[] command = line.split(";");
@@ -60,13 +64,28 @@ public class ChatThread extends Thread implements ChatCommands {
                         String cookie = loginCredentials[0];
                         loginCookie(cookie);
                     }
-                    // register(String username, String telephone, String password)
+                    // register(String username, String password, String telephone)
                     case ("REGISTER") -> {
                         String[] registerCredentials = command[1].split(" ");
                         String registerUserName = registerCredentials[0];
                         String registerPassword = registerCredentials[1];
                         String registerTelephone = registerCredentials[2];
                         register(registerUserName, registerPassword, registerTelephone);
+                    }
+                    // getConfig(int id)
+                    case ("GET_CONFIG") -> {
+                        int id = Integer.parseInt(command[1]);
+                        getConfig(id);
+                    }
+                    // updateConfig(int id, String chatName)
+                    case("UPDATE_CONFIG") -> {
+                        String[] inputs = command[1].split(" ");
+                        int id = Integer.parseInt(inputs[0]);
+                        String chatName = inputs[1];
+                        for (int i = 2; i < inputs.length; i++) {
+                            chatName += " " + inputs[i];
+                        }
+                        updateConfig(id, chatName);
                     }
                     // logout("String cookieValue")
                     case ("LOGOUT") -> {
@@ -194,6 +213,56 @@ public class ChatThread extends Thread implements ChatCommands {
 
     // AUTHENTICATED only functions:
     // without AUTHENTICATED returns AUTHENTICATION_REQUIRED;
+
+    // Input:
+    // GET_CONFIG;<ID>
+    // Output:
+    // OK;<CHAT NAME>
+    // AUTHENTICATION_REQUIRED;
+    // NO_SUCH_CONFIG;
+    public boolean getConfig(int id) throws IOException {
+        String output;
+        if(!isAuthenticated) {
+            output = "AUTHENTICATION_REQUIRED;\n";
+            out.write(output.getBytes());
+            return false;
+        }
+        String config = DBConnect.getConfig(id);
+        if (Objects.isNull(config)) {
+            output = "NO_SUCH_CONFIG;\n";
+            out.write(output.getBytes());
+            return false;
+        }
+        output = "OK;" + config + "\n";
+        out.write(output.getBytes());
+        return true;
+    }
+
+    // Input:
+    // UPDATE_CONFIG;<ID> <CHAT_NAME>
+    // Output:
+    // OK;
+    // AUTHENTICATION_REQUIRED;
+    // NO_SUCH_CONFIG;
+    public boolean updateConfig(int id, String chatName) throws IOException {
+        String output;
+        if(!isAuthenticated) {
+            output = "AUTHENTICATION_REQUIRED;\n";
+            out.write(output.getBytes());
+            return false;
+        }
+        String config = DBConnect.getConfig(id);
+        if (Objects.isNull(config)) {
+            output = "NO_SUCH_CONFIG;\n";
+            out.write(output.getBytes());
+            return false;
+        }
+
+        DBConnect.updateConfig(id, chatName);
+        output = "OK;\n";
+        out.write(output.getBytes());
+        return true;
+    }
 
     // Input:
     // LOGOUT;COOKIE_VALUE

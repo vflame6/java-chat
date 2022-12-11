@@ -32,8 +32,11 @@ public class DBConnect {
     // Создаёт все нужные таблицы в базе, использовать один раз
     public static void createChatTables() {
         createUsersTable();
+        createConfigTable();
         createMailsTable();
         createSessionsTable();
+
+        createDefaultConfig();
         createAdminUser();
     }
 
@@ -46,6 +49,20 @@ public class DBConnect {
                 telephone text NOT NULL,
                 passwordHash text,
                 isAdmin integer DEFAULT 0
+                );""";
+        try (Connection connection = getConnection()) {
+            Statement statement = connection.createStatement();
+            statement.execute(sql);
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void createConfigTable() {
+        String sql = """
+                CREATE TABLE IF NOT EXISTS config (
+                id INTEGER PRIMARY KEY,
+                chat_name TEXT NOT NULL
                 );""";
         try (Connection connection = getConnection()) {
             Statement statement = connection.createStatement();
@@ -90,14 +107,55 @@ public class DBConnect {
         }
     }
 
+    // Создаёт конфигурацию по умолчанию в таблице config
+    private static void createDefaultConfig() {
+        String sql = "INSERT INTO config(chat_name) VALUES('Chatik!')";
+
+        try (Connection connection = getConnection()) {
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(sql);
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     // Создаёт пользователя admin в таблице users
     private static void createAdminUser() {
         String sql = "INSERT INTO users(username, telephone, passwordHash, isAdmin) VALUES('admin','+7 (999) 999-99-99', '21232f297a57a5a743894a0e4a801fc3', 1)";
 
         try (Connection connection = getConnection()){
             Statement statement = connection.createStatement();
-
             statement.executeUpdate(sql);
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static String getConfig(int searchId) {
+        String sql = "SELECT * FROM config WHERE id = ? LIMIT 1";
+
+        try (Connection connection = getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, searchId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getString(2);
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // Метод для обновления имени чата в базе config
+    public static void updateConfig(int configId, String chatName) {
+        String sql = "UPDATE config SET chat_name = ? WHERE id = ?";
+
+        try (Connection connection = getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, chatName);
+            preparedStatement.setInt(2, configId);
+            preparedStatement.executeUpdate();
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }

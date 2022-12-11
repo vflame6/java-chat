@@ -7,6 +7,8 @@ public interface ChatCommands {
     boolean login(String username, String password) throws IOException;
     boolean loginCookie(String cookieValue) throws IOException;
     boolean register(String username, String telephone, String password) throws IOException;
+    boolean getConfig(int id) throws IOException;
+    boolean updateConfig(int id, String chatName) throws IOException;
     boolean logout(String cookieValue) throws IOException;
     boolean getLastMessageTimestamp() throws IOException;
     boolean getMessages() throws IOException;
