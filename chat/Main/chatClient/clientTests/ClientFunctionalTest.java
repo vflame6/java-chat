@@ -7,7 +7,6 @@ import chat.Main.chatClient.NoAdminRightsException;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.io.FileReader;
 import java.net.UnknownHostException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,9 +27,7 @@ class ClientFunctionalTest {
 
     @Test
     void getMessagesTest() {
-        assertThrows(AuthenticationRequiredException.class,()->{
-            test.getMessages();
-        });
+        assertThrows(AuthenticationRequiredException.class,()-> test.getMessages());
     }
     @Test
     void loginTest() {
@@ -38,7 +35,7 @@ class ClientFunctionalTest {
     }
     @Test
     void phoneNumberTest() {
-        assertThrows(InvalidTelephoneException.class,()->{test.register("testuser","testpassword","+79");});
+        assertThrows(InvalidTelephoneException.class,()-> test.register("testuser","testpassword","+79"));
     }
     @Test
     void privateKeyExistsTest(){
@@ -47,17 +44,15 @@ class ClientFunctionalTest {
     }
     @Test
     void deleteMessageTestWithoutLogin() {
-        assertThrows(AuthenticationRequiredException.class,()->{
+        assertThrows(AuthenticationRequiredException.class,()-> test.deleteMessage(1));
+    }
+    @Test
+    void deleteMessageTestWithLogin() {
+        assertThrows(NoAdminRightsException.class,()->{
+            test.login("testuser","testpassword");
             test.deleteMessage(1);
         });
     }
-        @Test
-        void deleteMessageTestWithLogin() {
-            assertThrows(NoAdminRightsException.class,()->{
-                test.login("testuser","testpassword");
-                test.deleteMessage(1);
-            });
-        }
-    }
+}
 
 

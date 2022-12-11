@@ -3,12 +3,9 @@ package chat.Main.chatClient.clientTests;
 import chat.Main.chatClient.ClientCookies;
 import org.junit.jupiter.api.Test;
 
-import java.io.FileNotFoundException;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class ClientCookiesTest {
-
     ClientCookies test = new ClientCookies();
 
     @Test
@@ -18,7 +15,7 @@ class ClientCookiesTest {
         assertEquals("123", test.getCookie());
     }
 
-@Test
+    @Test
     void getCookieTest567() {
         String cookie = "567";
         test.createCookie(cookie);
@@ -44,9 +41,7 @@ class ClientCookiesTest {
         String cookie = "123";
         test.createCookie(cookie);
         test.deleteCookie();
-        assertThrows(RuntimeException.class,() ->{
-            test.getCookie();
-        });
+        assertThrows(RuntimeException.class,() -> test.getCookie());
     }
 
     @Test
@@ -60,6 +55,4 @@ class ClientCookiesTest {
         test.deleteCookie();
         assertFalse(test.isCookieExists());
     }
-
-
 }
