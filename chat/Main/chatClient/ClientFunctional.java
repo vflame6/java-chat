@@ -62,7 +62,7 @@ public class ClientFunctional implements ChatCommands {
                 ", messageList=" + messageList +
                 '}';
     }
-
+    // Тестовый метод для проверки связи с сервером
     public boolean ping() {
         String command = "PING;" + "\n";
 
@@ -75,7 +75,7 @@ public class ClientFunctional implements ChatCommands {
             return false;
         }
     }
-
+    // Метод авторизации, принимает логин и пароль, передает их на сервер
     public boolean login(String username, String password) {
         String command = "LOGIN;" + username.trim() + " " + password.trim() + "\n";
 
@@ -99,10 +99,9 @@ public class ClientFunctional implements ChatCommands {
         }
     }
 
-
+    // Метод реализующий вход по куки, сравнивает переданную куку с сохранненой в БД.
     public boolean loginCookie(String cookieValue) {
         String command = "LOGIN_COOKIE;" + cookieValue + "\n";
-
         try {
             out.write(command.getBytes());
             String result = inp.readLine();
@@ -123,6 +122,8 @@ public class ClientFunctional implements ChatCommands {
         }
     }
 
+    // Метод регистрации, принимает данные пользователя и отправляет на сервер,
+    // выкидывает ошибку при неверном формате телефона
     public boolean register(String username, String password, String telephone) {
         String command = "REGISTER;" + username.trim() + " " + password.trim() + " " + telephone.trim() + "\n";
 
@@ -146,6 +147,7 @@ public class ClientFunctional implements ChatCommands {
         }
     }
 
+    // Метод прекращает сессию пользователя
     public boolean logout(String cookieValue) {
         String command ="LOGOUT;" + cookieValue + "\n";
 
@@ -170,6 +172,7 @@ public class ClientFunctional implements ChatCommands {
         }
     }
 
+    // Запрос на сервер о времени последнего сообщения
     public boolean getLastMessageTimestamp() {
         String command = "GET_LAST_MESSAGE_TIMESTAMP;" + "\n";
 
@@ -195,6 +198,7 @@ public class ClientFunctional implements ChatCommands {
         }
     }
 
+    // Запрос с сервера списка всех сообщений
     public boolean getMessages() {
         String command = "GET_MESSAGES;" + "\n";
 
@@ -220,6 +224,7 @@ public class ClientFunctional implements ChatCommands {
         }
     }
 
+    // Метод отпрвки сообщения
     public boolean sendMessage(String content) {
         Timestamp date = new Timestamp(System.currentTimeMillis());
         Message message = new Message(0, username, content.trim(), date);
@@ -242,6 +247,7 @@ public class ClientFunctional implements ChatCommands {
         }
     }
 
+    // Удалить сообщение по id(только admin-user)
     public boolean deleteMessage(int id) {
         String command ="DELETE_MESSAGE;" + id + "\n";
 
@@ -268,10 +274,12 @@ public class ClientFunctional implements ChatCommands {
         }
     }
 
+    // Неверная команда
     public boolean invalidCommand() {
         return true;
     }
 
+    // Закрыть соеденение с сервером
     public void closeConnection() {
         try{
             inp.close();
