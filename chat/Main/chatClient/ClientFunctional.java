@@ -31,7 +31,7 @@ public class ClientFunctional implements ChatCommands {
         SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
 
         try {
-            ip = InetAddress.getByName(address);
+            ip = InetAddress.getByName(address.trim());
         } catch (UnknownHostException e) {
             e.printStackTrace();
             throw e;
@@ -77,7 +77,7 @@ public class ClientFunctional implements ChatCommands {
     }
 
     public boolean login(String username, String password) throws InvalidCredentialsException {
-        String command = "LOGIN;" + username + " " + password + "\n";
+        String command = "LOGIN;" + username.trim() + " " + password.trim() + "\n";
 
         try {
             out.write(command.getBytes());
@@ -124,7 +124,7 @@ public class ClientFunctional implements ChatCommands {
     }
 
     public boolean register(String username, String password, String telephone) {
-        String command = "REGISTER;" + username + " " + password + " " + telephone + "\n";
+        String command = "REGISTER;" + username.trim() + " " + password.trim() + " " + telephone.trim() + "\n";
 
         try {
             out.write(command.getBytes());
@@ -222,7 +222,7 @@ public class ClientFunctional implements ChatCommands {
 
     public boolean sendMessage(String content) {
         Timestamp date = new Timestamp(System.currentTimeMillis());
-        Message message = new Message(0, username, content, date);
+        Message message = new Message(0, username, content.trim(), date);
         String encoded_message = message.encodeMessage();
         String command = "SEND_MESSAGE;" + encoded_message + "\n";
 
