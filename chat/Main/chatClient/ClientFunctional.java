@@ -76,7 +76,7 @@ public class ClientFunctional implements ChatCommands {
         }
     }
 
-    public boolean login(String username, String password) throws InvalidCredentialsException {
+    public boolean login(String username, String password) {
         String command = "LOGIN;" + username.trim() + " " + password.trim() + "\n";
 
         try {

@@ -10,6 +10,7 @@ import javax.net.ssl.*;
 import chat.Main.ChatCommands;
 import chat.Main.InvalidTelephoneException;
 import chat.Main.Message;
+import chat.Main.Telephone;
 
 public class ChatThread extends Thread implements ChatCommands {
     private final SSLSocket sslSocket;

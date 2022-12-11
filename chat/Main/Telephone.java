@@ -1,4 +1,4 @@
-package chat.Main.chatServer;
+package chat.Main;
 
 import chat.Main.InvalidTelephoneException;
 
