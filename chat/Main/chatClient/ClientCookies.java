@@ -8,11 +8,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class ClientCookies implements Cookies {
+
+    // Проверка есть ли куки-файл
     public boolean isCookieExists() {
         File file = new File("cookie.txt");
         return file.exists() && !file.isDirectory();
     }
 
+    // Прочитать куки из файла
     public String getCookie(){
         try {
             FileReader cookieFile = new FileReader("cookie.txt");
@@ -32,6 +35,7 @@ public class ClientCookies implements Cookies {
             }
     }
 
+    // Создать куки-файл
     public void createCookie(String cookie) {
         FileWriter cookieWriter;
         try {
@@ -43,7 +47,7 @@ public class ClientCookies implements Cookies {
             throw new RuntimeException(e);
         }
     }
-
+    // Удалить куки-файл
     public void deleteCookie() {
         File cookieFile = new File("cookie.txt");
         cookieFile.delete();
