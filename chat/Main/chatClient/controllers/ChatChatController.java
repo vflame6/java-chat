@@ -40,7 +40,7 @@ public class ChatChatController {
     void initialize() {
         if (clientFunctional.getMessages()) {
             messageList = clientFunctional.messageList;
-            time = messageList.get(messageList.size() - 1).getDate();
+            time = messageList.get(messageList.size() - 1).getTimestamp();
             for (Message message : messageList) {
                 displayMessage(message);
                 distance += 5;
@@ -55,7 +55,7 @@ public class ChatChatController {
                 if (clientFunctional.getMessages()) {
                     chat.getChildren().clear();
                     messageList = clientFunctional.messageList;
-                    time = messageList.get(messageList.size() - 1).getDate();
+                    time = messageList.get(messageList.size() - 1).getTimestamp();
                     for (Message message : messageList) {
                         displayMessage(message);
                         distance += 5;

@@ -1,11 +1,13 @@
 package chat.Main.chatServer;
 
 import java.io.IOException;
+import java.sql.Time;
+import java.util.TimeZone;
 import javax.net.ssl.*;
 
 public class Server {
-    public static void launchServer() {
-        int port = 9000;
+    public static void launchServer(int port, String timezone) {
+        TimeZone.setDefault(TimeZone.getTimeZone(timezone));
         System.setProperty("javax.net.ssl.keyStore","encryption/KeyStore1.jks");
         System.setProperty("javax.net.ssl.keyStorePassword","123456");
 

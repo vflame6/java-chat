@@ -313,7 +313,7 @@ public class ChatThread extends Thread implements ChatCommands {
             return false;
         }
 
-        Timestamp timestamp = lastMessage.getDate();
+        Timestamp timestamp = lastMessage.getTimestamp();
         output = "OK;" + timestamp.toString() + "\n";
         out.write(output.getBytes());
         return true;
@@ -347,7 +347,7 @@ public class ChatThread extends Thread implements ChatCommands {
             int id = encryptedMessage.getId();
             String from = encryptedMessage.getFrom();
             String encryptedContent = encryptedMessage.getContent();
-            Timestamp date = encryptedMessage.getDate();
+            Timestamp date = encryptedMessage.getTimestamp();
             String decryptedContent = encryptor.decryptMessage(encryptedContent);
             Message message = new Message(id, from, decryptedContent, date);
             decodedMessages.add(message);
@@ -374,11 +374,11 @@ public class ChatThread extends Thread implements ChatCommands {
         Message message = Message.decodeMessage(encodedMessage);
         String from = message.getFrom();
         String content = message.getContent();
-        Timestamp date = message.getDate();
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 
         String encryptedContent = encryptor.encryptMessage(content);
         ChatLogger.logMessage(from, encryptedContent);
-        DBConnect.createMessage(from, encryptedContent, date);
+        DBConnect.createMessage(from, encryptedContent, timestamp);
         output = "OK;\n";
         out.write(output.getBytes());
         return true;

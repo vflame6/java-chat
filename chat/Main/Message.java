@@ -3,28 +3,26 @@ package chat.Main;
 import java.io.*;
 import java.sql.Timestamp;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Message implements Serializable {
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter fullDateFormatter = DateTimeFormatter.ofPattern("E, dd MMM HH:mm").withZone(TimeZone.getDefault().toZoneId());
+    private static final DateTimeFormatter minDateFormatter = DateTimeFormatter.ofPattern("HH:mm").withZone(TimeZone.getDefault().toZoneId());
     private final int id;
     private final String from;
     private final String content;
-    private final Timestamp date;
+    private final Timestamp timestamp;
 
     // Класс оболочка для каждого сообщения. Хранит в себе:
     // int id поля в базе
     // String from имя пользователя отправителя
     // String content само сообщение
     // Timestamp date время отправки сообщения
-    public Message(int id, String from, String content, Timestamp date) {
+    public Message(int id, String from, String content, Timestamp timestamp) {
         this.id = id;
         this.from = from;
         this.content = content;
-        this.date = date;
+        this.timestamp = timestamp;
     }
 
     public int getId() {
@@ -39,19 +37,23 @@ public class Message implements Serializable {
         return content;
     }
 
-    public Timestamp getDate() {
-        return date;
+    public Timestamp getTimestamp() {
+        return timestamp;
     }
 
     // Форматирование времени отправки для нормальной читаемости, без миллисекунд
-    private String getFormattedDate() {
-        return date.toLocalDateTime().format(formatter);
+    public String getFullFormattedDate() {
+        return timestamp.toLocalDateTime().format(fullDateFormatter);
+    }
+
+    public String getMinFormattedDate() {
+        return timestamp.toLocalDateTime().format(minDateFormatter);
     }
 
     // Удобочитаемый вид, возвращает строку
     @Override
     public String toString() {
-        return String.format("Message(%d, %s, %s, %s)", id, from, content, this.getFormattedDate());
+        return String.format("Message(%d, %s, %s, %s)", id, from, content, timestamp);
     }
 
     // Метод для сравнения объектов.
@@ -61,13 +63,13 @@ public class Message implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Message message = (Message) o;
-        return id == message.id && Objects.equals(from, message.from) && Objects.equals(content, message.content) && Objects.equals(date, message.date);
+        return id == message.id && Objects.equals(from, message.from) && Objects.equals(content, message.content) && Objects.equals(timestamp, message.timestamp);
     }
 
     // Метод для получения хэш-значения объектов.
     @Override
     public int hashCode() {
-        return Objects.hash(id, from, content, date);
+        return Objects.hash(id, from, content, timestamp);
     }
 
     // Методы (де)сериализации. Нужны для преобразования объектов в строку Base64 и передачи между клиентом и сервером.
