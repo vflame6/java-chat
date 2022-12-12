@@ -1,5 +1,8 @@
-package chat.Main.chatClient;
+package chat.Main.chatClient.controllers;
 
+import chat.Main.chatClient.ClientFunctional;
+import chat.Main.chatClient.ClientHolder;
+import chat.Main.chatClient.SceneChanger;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -31,7 +34,7 @@ public class ChatLogInController {
             login = loginString.getText();
             password = passwordString.getText();
             Stage stage = (Stage) logInButton.getScene().getWindow();
-            Parent root = null;
+            Parent root;
             if (clientFunctional.login(login, password)) {
                 stage.close();
                 root = SceneChanger.changeScene("ChatChat.fxml");
@@ -45,7 +48,7 @@ public class ChatLogInController {
         signUpButton.setOnAction((event) -> {
             Stage stage = (Stage) signUpButton.getScene().getWindow();
             stage.close();
-            Parent root = null;
+            Parent root;
             root = SceneChanger.changeScene("ChatRegistration.fxml");
             stage.setScene(new Scene(root));
             stage.show();
@@ -55,7 +58,7 @@ public class ChatLogInController {
             Stage stage = (Stage) backButton.getScene().getWindow();
             stage.close();
             clientFunctional.closeConnection();
-            Parent root = null;
+            Parent root;
             root = SceneChanger.changeScene("ChatConnect.fxml");
             stage.setScene(new Scene(root));
             stage.show();

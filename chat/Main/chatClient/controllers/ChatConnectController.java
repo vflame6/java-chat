@@ -1,5 +1,8 @@
-package chat.Main.chatClient;
+package chat.Main.chatClient.controllers;
 
+import chat.Main.chatClient.ClientFunctional;
+import chat.Main.chatClient.ClientHolder;
+import chat.Main.chatClient.SceneChanger;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -24,7 +27,7 @@ public class ChatConnectController {
         connectButton.setOnAction((event) -> {
             ip = ipString.getText();
             Stage stage = (Stage) connectButton.getScene().getWindow();
-            Parent root = null;
+            Parent root;
             try {
                 ClientFunctional clientFunctional = new ClientFunctional(ip);
                 if (clientFunctional.ping()) {

@@ -1,8 +1,10 @@
-package chat.Main.chatClient;
+package chat.Main.chatClient.controllers;
 
 import chat.Main.InvalidTelephoneException;
+import chat.Main.chatClient.ClientFunctional;
+import chat.Main.chatClient.ClientHolder;
+import chat.Main.chatClient.SceneChanger;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -10,11 +12,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.Objects;
 
 public class ChatRegistrationController {
     ClientFunctional clientFunctional = ClientHolder.getInstance().getClient();
@@ -45,7 +42,7 @@ public class ChatRegistrationController {
             passwordrep = passwordRepeatString.getText() ;
             login = loginString.getText();
             Stage stage = (Stage) signUpButton.getScene().getWindow();
-            Parent root = null;
+            Parent root;
 
             if (!password.equals(passwordrep)) {
                 problemString.setText("                                                                 Пароли не совпадают");
@@ -68,7 +65,7 @@ public class ChatRegistrationController {
         backButton.setOnAction((event) -> {
             Stage stage = (Stage) backButton.getScene().getWindow();
             stage.close();
-            Parent root = null;
+            Parent root;
             root = SceneChanger.changeScene("ChatLogIn.fxml");
             stage.setScene(new Scene(root));
             stage.show();

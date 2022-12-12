@@ -1,5 +1,7 @@
-package chat.Main.chatClient;
+package chat.Main.chatClient.controllers;
 import chat.Main.Message;
+import chat.Main.chatClient.ClientFunctional;
+import chat.Main.chatClient.ClientHolder;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -65,9 +67,11 @@ public class ChatChatController {
         });
 
             sendButton.setOnAction((event) -> {
-                System.out.println("1");
                 String message = enterMessage.getText();
-                clientFunctional.sendMessage(message);
+                if (!message.equals("")) {
+                    clientFunctional.sendMessage(message);
+                }
+                enterMessage.clear();
             });
         }
         public void displayMessage(Message message){
