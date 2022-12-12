@@ -46,7 +46,7 @@
                <font>
                   <Font size="14.0" />
                </font></PasswordField>
-            <Label fx:id="problemString" layoutX="17.0" layoutY="22.0" prefHeight="42.0" prefWidth="392.0" style="-fx-background-color: #116466; -fx-background-radius: 10;" text="                    Введите логин и парль для авторизации" textFill="#d9b08c">
+            <Label fx:id="problemString" layoutX="17.0" layoutY="22.0" prefHeight="42.0" prefWidth="392.0" style="-fx-background-color: #116466; -fx-background-radius: 10;" text="                    Введите логин и пароль для авторизации" textFill="#d9b08c">
                <font>
                   <Font name="Calisto MT" size="14.0" />
                </font>
