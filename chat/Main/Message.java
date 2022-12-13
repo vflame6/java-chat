@@ -6,8 +6,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Message implements Serializable {
-    private static final DateTimeFormatter fullDateFormatter = DateTimeFormatter.ofPattern("E, dd MMM HH:mm").withZone(TimeZone.getDefault().toZoneId());
-    private static final DateTimeFormatter minDateFormatter = DateTimeFormatter.ofPattern("HH:mm").withZone(TimeZone.getDefault().toZoneId());
+    private static final DateTimeFormatter fullDateFormatter = DateTimeFormatter.ofPattern("E, dd MMM HH:mm")
+            .withZone(TimeZone.getDefault().toZoneId());
+    private static final DateTimeFormatter minDateFormatter = DateTimeFormatter.ofPattern("HH:mm")
+            .withZone(TimeZone.getDefault().toZoneId());
     private final int id;
     private final String from;
     private final String content;

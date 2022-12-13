@@ -40,12 +40,7 @@ public class Encryptor {
             FileOutputStream privateKeyFile = new FileOutputStream(privateKey);
             privateKeyFile.write(pvt.getEncoded());
             privateKeyFile.close();
-
-            System.err.println("Private key format: " + pvt.getFormat());
-            System.err.println("Public key format: " + pub.getFormat());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
+        } catch (IOException | NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
     }
@@ -58,9 +53,7 @@ public class Encryptor {
             PKCS8EncodedKeySpec ks = new PKCS8EncodedKeySpec(bytes);
             KeyFactory kf = KeyFactory.getInstance("RSA");
             return kf.generatePrivate(ks);
-        } catch (IOException | NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (InvalidKeySpecException e) {
+        } catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException e) {
             e.printStackTrace();
         }
         return null;
@@ -74,12 +67,9 @@ public class Encryptor {
             X509EncodedKeySpec ks = new X509EncodedKeySpec(bytes);
             KeyFactory kf = KeyFactory.getInstance("RSA");
             return kf.generatePublic(ks);
-        } catch (IOException | NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (InvalidKeySpecException e) {
+        } catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
@@ -92,8 +82,7 @@ public class Encryptor {
             byte[] encrypted = cipher.doFinal(msgBytes);
             return  encodeData(encrypted);
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             return e.getMessage();
         }
     }
@@ -111,8 +100,7 @@ public class Encryptor {
 
             return new String(decryptMsg, StandardCharsets.UTF_8);
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             return e.getMessage();
         }
     }

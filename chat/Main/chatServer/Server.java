@@ -8,6 +8,7 @@ import javax.net.ssl.*;
 public class Server {
     public static void launchServer(int port, String timezone) {
         TimeZone.setDefault(TimeZone.getTimeZone(timezone));
+
         System.setProperty("javax.net.ssl.keyStore","encryption/KeyStore1.jks");
         System.setProperty("javax.net.ssl.keyStorePassword","123456");
 
