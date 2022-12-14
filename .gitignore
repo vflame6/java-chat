@@ -1,7 +1,7 @@
 .idea
 java-chat.iml
 cookie.txt
-log/access_log.txt
+log/*
 lib/junit
 lib/javafx-sdk-19
 lib/sqlite-jdbc-3.40.0.0.jar

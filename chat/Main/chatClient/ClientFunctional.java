@@ -290,9 +290,12 @@ public class ClientFunctional implements ChatCommands {
             if (result.equals("OK;")){
                 // OK;
                 return true;
-            } else {
+            } else if (result.equals("AUTHENTICATION_REQUIRED;")){
                 // AUTHENTICATION_REQUIRED;
                 throw new AuthenticationRequiredException("No authentication");
+            } else {
+                // TOO_LONG_MESSAGE;
+                return false;
             }
         } catch (IOException e) {
             e.printStackTrace();

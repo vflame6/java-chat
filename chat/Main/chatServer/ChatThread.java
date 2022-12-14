@@ -360,6 +360,7 @@ public class ChatThread extends Thread implements ChatCommands {
     // SEND_MESSAGE;BASE64_ENCODED_MESSAGE
     // Output:
     // OK;
+    // TOO_LONG_MESSAGE;
     // AUTHENTICATION_REQUIRED;
     // Сообщения должны передаваться в базу в зашифрованном виде
     public boolean sendMessage(String encodedMessage) throws IOException {
@@ -369,6 +370,12 @@ public class ChatThread extends Thread implements ChatCommands {
         }
 
         Message message = Message.decodeMessage(encodedMessage);
+        if (message.getContent().length() > 100) {
+            output = "TOO_LONG_MESSAGE;\n";
+            out.write(output.getBytes());
+            return false;
+        }
+
         String encryptedContent = encryptor.encryptMessage(message.getContent());
         DBConnect.createMessage(message.getFrom(),
                 encryptedContent,

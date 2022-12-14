@@ -2,6 +2,7 @@ package chat.Main.chatClient.controllers;
 import chat.Main.Message;
 import chat.Main.chatClient.ClientFunctional;
 import chat.Main.chatClient.ClientHolder;
+import chat.Main.chatClient.util.TextProcessor;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -69,19 +70,21 @@ public class ChatChatController {
             sendButton.setOnAction((event) -> {
                 String message = enterMessage.getText();
                 if (!message.equals("")) {
-                    clientFunctional.sendMessage(message);
+                    for (String singleMessage : TextProcessor.separateMessages(message)) {
+                        clientFunctional.sendMessage(singleMessage);
+                    }
                 }
                 enterMessage.clear();
             });
         }
-        public void displayMessage(Message message){
+        public void displayMessage(Message message) {
             int rows = message.getContent().length() / 44 + 1;
             Label lbl = new Label();
             lbl.setMinHeight(35 * rows);
             lbl.setMinWidth(420);
             lbl.setLayoutX(minx);
             lbl.setLayoutY(miny + distance);
-            lbl.setText(" " + message.getContent());
+            lbl.setText(TextProcessor.processMessage(message.getContent()));
             miny += 35 * rows;
             chat.getChildren().add(lbl);
         }
