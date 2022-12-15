@@ -123,6 +123,11 @@ public class ChatThread extends Thread implements ChatCommands {
                 int messageId = Integer.parseInt(id);
                 deleteMessage(messageId);
             }
+            case("DELETE_USER")->
+            {
+                String username = command[1];
+                deleteUser(username);
+            }
             // Command not exists:
             // invalidCommand()
             default -> invalidCommand();
@@ -420,6 +425,32 @@ public class ChatThread extends Thread implements ChatCommands {
         output = "OK;\n";
         out.write(output.getBytes());
         return true;
+    }
+
+    // Input:
+    // DELETE_USER;<USERNAME>
+    // OUTPUT:
+    // OK;
+    // INVALID_USERNAME
+    // Удаление пользователя по username
+    public boolean deleteUser(String username) throws IOException {
+        if (!isAuthenticated() && !isAdmin()) {
+            return false;
+        }
+        String output;
+        User user = DBConnect.getUser(username);
+        if (Objects.isNull(user)) {
+            output = "INVALID_USERNAME;";
+            out.write(output.getBytes());
+            return false;
+        } else {
+            DBConnect.deleteUser(username);
+            output = "OK;";
+            out.write(output.getBytes());
+            return true;
+
+        }
+
     }
 
     // Any invalid command:
