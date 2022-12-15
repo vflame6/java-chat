@@ -38,6 +38,7 @@ public class ChatLogInController {
             if (clientFunctional.login(login, password)) {
                 stage.close();
                 root = SceneChanger.changeScene("ChatChat.fxml");
+                stage.setTitle("Chat");
                 stage.setScene(new Scene(root));
                 stage.show();
             } else {

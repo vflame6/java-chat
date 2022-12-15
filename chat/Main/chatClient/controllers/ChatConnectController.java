@@ -38,6 +38,7 @@ public class ChatConnectController {
                             stage.close();
                             root = SceneChanger.changeScene("ChatChat.fxml");
                             stage.setScene(new Scene(root));
+                            stage.setTitle("Chat");
                             stage.show();
                         } else {
                             stage.close();

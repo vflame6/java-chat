@@ -11,6 +11,7 @@ public class ClientApplication extends javafx.application.Application {
         Parent root = SceneChanger.changeScene("ChatConnect.fxml");
         Scene scene = new Scene(root);
         primaryStage.setTitle("KiChatApp");
+        primaryStage.setResizable(false);
         primaryStage.setScene(scene);
         primaryStage.show();
     }

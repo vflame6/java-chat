@@ -15,48 +15,33 @@
                </font>
             </Label>
             <Button fx:id="logOutButton" layoutX="20.0" layoutY="493.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="60.0" style="-fx-background-color: #D1E8E2;" />
-            <Button focusTraversable="false" layoutX="20.0" layoutY="378.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="60.0" style="-fx-background-color: #D1E8E2;" />
+            <Button fx:id="darkButton" focusTraversable="false" layoutX="20.0" layoutY="378.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="60.0" style="-fx-background-color: #D1E8E2;" />
             <Button fx:id="updateButton" layoutX="20.0" layoutY="435.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="60.0" style="-fx-background-color: #D1E8E2;" />
-            <ImageView fitHeight="26.0" fitWidth="26.0" layoutX="37.0" layoutY="435.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@/resources/streamlinehq-synchronize-arrows-1-interface-essential-48.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="26.0" fitWidth="34.0" layoutX="37.0" layoutY="493.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@/resources/streamlinehq-home-button-3-interface-essential-48.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="34.0" fitWidth="34.0" layoutX="33.0" layoutY="374.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@/resources/streamlinehq-settings-switch-on-1-interface-essential-48.png" />
-               </image>
-            </ImageView>
          </children></AnchorPane>
       <AnchorPane layoutX="100.0" prefHeight="550.0" prefWidth="249.0" style="-fx-background-color: #D9B08C;" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="0.0">
          <children>
             <TextField layoutX="38.0" layoutY="17.0" prefHeight="34.0" prefWidth="199.0" promptText="Search..." style="-fx-background-color: #D1E8E2; -fx-background-radius: 10;" AnchorPane.leftAnchor="38.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="17.0" />
             <ImageView fitHeight="34.0" fitWidth="26.0" layoutX="9.0" layoutY="21.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@/resources/streamlinehq-pin-1-interface-essential-48.png" />
+                  <Image url="@/resources/search.png" />
                </image>
             </ImageView>
             <AnchorPane layoutX="9.0" layoutY="82.0" prefHeight="77.0" prefWidth="230.0" style="-fx-background-color: #D1E8E2; -fx-background-radius: 10;">
                <children>
                   <ImageView fitHeight="60.0" fitWidth="76.0" layoutX="10.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@/resources/streamlinehq-single-neutral-circle-users-48(1).png" />
+                        <Image url="@/resources/users.png" />
                      </image>
                   </ImageView>
-                  <Label fx:id="chatName1" layoutX="70.0" layoutY="14.0" prefHeight="26.0" prefWidth="160.0" style="-fx-background-color: #D1E8E2; -fx-background-radius: 1;" text="  Вторячки" textFill="#116466" />
-                  <Label layoutX="70.0" layoutY="39.0" prefHeight="26.0" prefWidth="160.0" style="-fx-background-color: #D1E8E2; -fx-background-radius: 1;" text="  time" textFill="#116466" />
+                  <Label fx:id="chatName1" layoutX="70.0" layoutY="14.0" prefHeight="26.0" prefWidth="160.0" style="-fx-background-color: #D1E8E2; -fx-background-radius: 1;" text="  Вторячки" />
+                  <Label fx:id="userTimeLabel" layoutX="70.0" layoutY="39.0" prefHeight="26.0" prefWidth="160.0" style="-fx-background-color: #D1E8E2; -fx-background-radius: 1;" text="  time" />
                </children>
             </AnchorPane>
          </children>
       </AnchorPane>
-      <ScrollPane  layoutX="350.0" layoutY="65.0" prefHeight="400.0" prefWidth="450.0" style="-fx-background-color: #D9B08C;">
+      <ScrollPane layoutX="350.0" layoutY="65.0" prefHeight="400.0" prefWidth="450.0" style="-fx-background-color: #D9B08C;">
          <content>
-            <AnchorPane fx:id="chat" minHeight="0.0" minWidth="0.0" prefHeight="1200.0" prefWidth="435.0" style="-fx-background-color: #D1E8E2;">
+            <AnchorPane fx:id="chat" minHeight="0.0" minWidth="0.0" prefHeight="400.0" prefWidth="435.0" style="-fx-background-color: #D1E8E2;">
             </AnchorPane>
          </content>
       </ScrollPane>
@@ -70,16 +55,17 @@
          <children>
             <AnchorPane layoutX="13.0" layoutY="8.0" prefHeight="46.0" prefWidth="426.0" style="-fx-background-color: #D1E8E2; -fx-background-radius: 10;">
                <children>
-                  <Label fx:id="chatName" layoutX="81.0" layoutY="8.0" prefHeight="34.0" prefWidth="298.0" text="Вторячки" textFill="#116466">
+                  <Label fx:id="chatName" layoutX="81.0" layoutY="8.0" prefHeight="34.0" prefWidth="278.0" text="Вторячки">
                      <font>
                         <Font name="Calisto MT" size="21.0" />
                      </font>
                   </Label>
                   <ImageView fitHeight="46.0" fitWidth="60.0" layoutX="14.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@/resources/streamlinehq-single-neutral-circle-users-48(1).png" />
+                        <Image url="@/resources/users.png" />
                      </image>
                   </ImageView>
+                  <Button fx:id="changeNameButton" layoutX="359.0" layoutY="8.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="58.0" style="-fx-background-color: #D1E8E2;" text="Change" />
                </children>
             </AnchorPane>
          </children>

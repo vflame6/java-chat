@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="800.0" style="-fx-background-color: #D1E8E2;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chat.Main.chatClient.controllers.ChatChatController">
+   <children>
+      <AnchorPane prefHeight="550.0" prefWidth="100.0" style="-fx-background-color: #222629;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label layoutX="14.0" layoutY="14.0" prefHeight="60.0" prefWidth="72.0" style="-fx-border-color: #5B837E; -fx-border-width: 3;" text="Ki..." textFill="#5b837e">
+               <font>
+                  <Font name="Californian FB" size="40.0" />
+               </font>
+            </Label>
+            <Button fx:id="logOutButton" layoutX="20.0" layoutY="493.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="60.0" />
+            <Button fx:id="darkButton" focusTraversable="false" layoutX="20.0" layoutY="378.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="60.0" />
+            <Button fx:id="updateButton" layoutX="20.0" layoutY="435.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="60.0" />
+         </children></AnchorPane>
+      <AnchorPane layoutX="100.0" prefHeight="550.0" prefWidth="249.0" style="-fx-background-color: #476662;" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <TextField layoutX="38.0" layoutY="17.0" prefHeight="34.0" prefWidth="199.0" promptText="Search..." style="-fx-background-radius: 10; -fx-background-color: #222629;" AnchorPane.leftAnchor="38.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="17.0" />
+            <ImageView fitHeight="34.0" fitWidth="26.0" layoutX="9.0" layoutY="21.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@search.png" />
+               </image>
+            </ImageView>
+            <AnchorPane layoutX="9.0" layoutY="82.0" prefHeight="77.0" prefWidth="230.0" style="-fx-background-color: #222629; -fx-background-radius: 10;">
+               <children>
+                  <ImageView fitHeight="60.0" fitWidth="76.0" layoutX="10.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@users.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="chatName1" layoutX="70.0" layoutY="14.0" prefHeight="26.0" prefWidth="160.0" style="-fx-background-radius: 1;" text="  Вторячки" textFill="WHITE" />
+                  <Label fx:id="userTimeLabel" layoutX="70.0" layoutY="39.0" prefHeight="26.0" prefWidth="160.0" style="-fx-background-radius: 1;" textFill="WHITE" />
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+      <ScrollPane layoutX="350.0" layoutY="65.0" prefHeight="400.0" prefWidth="450.0" style="-fx-background-color: #D9B08C;">
+         <content>
+          <AnchorPane fx:id="chat" minHeight="0.0" minWidth="0.0" prefHeight="1200.0" prefWidth="435.0" style="-fx-background-color: #5B837E;" />
+         </content>
+      </ScrollPane>
+      <AnchorPane layoutX="350.0" layoutY="466.0" prefHeight="84.0" prefWidth="450.0" style="-fx-background-color: #222629;">
+         <children>
+            <TextField fx:id="enterMessage" layoutX="18.0" layoutY="19.0" prefHeight="46.0" prefWidth="360.0" promptText="Enter messege" style="-fx-background-color: #6B6E70;" />
+            <Button fx:id="sendButton" layoutX="392.0" layoutY="25.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="34.0" />
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="350.0" layoutY="-1.0" prefHeight="65.0" prefWidth="450.0" style="-fx-background-color: #222629;">
+         <children>
+            <AnchorPane layoutX="13.0" layoutY="8.0" prefHeight="46.0" prefWidth="426.0" style="-fx-background-color: #476662; -fx-background-radius: 10;">
+               <children>
+                  <Label fx:id="chatName" layoutX="81.0" layoutY="8.0" prefHeight="34.0" prefWidth="283.0" text="Вторячки" textFill="WHITE">
+                     <font>
+                        <Font name="Calisto MT" size="21.0" />
+                     </font>
+                  </Label>
+                  <ImageView fitHeight="46.0" fitWidth="60.0" layoutX="14.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@users.png" />
+                     </image>
+                  </ImageView>
+                  <Button fx:id="changeNameButton" layoutX="360.0" layoutY="3.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="58.0" style="-fx-background-color: #D1E8E2;" text="Change" />
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

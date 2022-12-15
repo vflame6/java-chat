@@ -9,6 +9,7 @@ import java.net.UnknownHostException;
 import java.io.*;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Objects;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
@@ -32,6 +33,9 @@ public class ClientFunctional implements ChatCommands {
         SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
 
         try {
+            if (address.equals("")){
+                throw new UnknownHostException();
+            }
             ip = InetAddress.getByName(address.trim());
         } catch (UnknownHostException e) {
             e.printStackTrace();
