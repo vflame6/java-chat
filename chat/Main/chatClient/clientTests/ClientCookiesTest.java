@@ -1,6 +1,6 @@
 package chat.Main.chatClient.clientTests;
 
-import chat.Main.chatClient.ClientCookies;
+import chat.Main.chatClient.util.ClientCookies;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

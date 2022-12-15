@@ -1,4 +1,4 @@
-package chat.Main.chatClient;
+package chat.Main.chatClient.util;
 
 import chat.Main.Cookies;
 
