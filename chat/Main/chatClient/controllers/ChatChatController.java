@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -17,17 +18,22 @@ import javafx.stage.Stage;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Optional;
 
 public class ChatChatController {
     ClientFunctional clientFunctional = ClientHolder.getInstance().getClient();
     @FXML
     private AnchorPane chat;
     @FXML
-    private Label userTimeLabel;
+    private AnchorPane chatPane;
     @FXML
-    private Button logOutButton;
+    private Button searchButton;
     @FXML
-    private Button updateButton;
+    private TextField searchString;
+    @FXML
+    private Button changeNameButton;
+    @FXML
+    private Label userTimeString;
     @FXML
     private Label chatName;
     @FXML
@@ -38,6 +44,14 @@ public class ChatChatController {
     private Button sendButton;
     @FXML
     private Button darkButton;
+    @FXML
+    private Button updateButton;
+    @FXML
+    private Button logOutButton;
+    @FXML
+    private Button banButton;
+    @FXML
+    private Button deleteButton;
     private int minx = 5;
     private int miny = 15;
     private Timestamp time;
@@ -55,6 +69,13 @@ public class ChatChatController {
         darkButton.graphicProperty().setValue(new ImageView(theme.getImage()));
         ImageView send = new ImageView(new Image("/resources/send.png",32,28,false,false));
         sendButton.graphicProperty().setValue(new ImageView(send.getImage()));
+        ImageView search = new ImageView(new Image("/resources/search.png",25,25,false,false));
+        searchButton.graphicProperty().setValue(new ImageView(search.getImage()));
+
+        if (clientFunctional.getConfig(1)) {
+            chatName.setText(clientFunctional.chatName);
+            chatName1.setText(clientFunctional.chatName);
+        }
 
         if (clientFunctional.getMessages()) {
             messageList = clientFunctional.messageList;
@@ -64,10 +85,21 @@ public class ChatChatController {
                 displayMessage(message);
                 }
             miny = 15;
-            userTimeLabel.setText("  " + user + ": " + messageList.get(messageList.size() - 1).getMinFormattedDate());
+            userTimeString.setText("  " + user + ": " + messageList.get(messageList.size() - 1).getMinFormattedDate());
             }
 
+        searchButton.setOnAction((event) -> {
+            if((searchString.getText()).equals(clientFunctional.chatName)){
+                chatPane.setStyle("-fx-background-color: #D1E8E2;-fx-background-radius:10; -fx-border-width: 3; -fx-border-color: #116466; -fx-border-radius: 10;");
+            }
+            searchString.clear();
+        });
+
         updateButton.setOnAction((event) -> {
+            if (clientFunctional.getConfig(1)) {
+                chatName.setText(clientFunctional.chatName);
+                chatName1.setText(clientFunctional.chatName);
+            }
             clientFunctional.getLastMessageTimestamp();
             if (clientFunctional.lastMessageTimestamp.compareTo(time) != 0) {
                 if (clientFunctional.getMessages()) {
@@ -80,7 +112,7 @@ public class ChatChatController {
                     }
                 }
                 miny = 15;
-                userTimeLabel.setText("  " + user + ": " + messageList.get(messageList.size() - 1).getMinFormattedDate());
+                userTimeString.setText("  " + user + ": " + messageList.get(messageList.size() - 1).getMinFormattedDate());
             }
         });
 
@@ -105,15 +137,45 @@ public class ChatChatController {
             stage.show();
         });
 
+        if (clientFunctional.username.equals("admin")) {
+            deleteButton.setOnAction((event) -> {
+                TextInputDialog name = new TextInputDialog();
+                name.setTitle("Удалить сообщение");
+                name.setContentText("Пожалуйста, напишите id сообщения, которое хотите удалить:");
+                Optional<String> result = name.showAndWait();
+                if (result.isPresent()) {
+                    clientFunctional.deleteMessage(Integer.valueOf(result.get()));
+                }
+            });
+        }
+
+        changeNameButton.setOnAction((event) -> {
+            TextInputDialog name = new TextInputDialog();
+            name.setTitle("Изменить название беседы");
+            name.setContentText("Пожалуйста, введите новое название:");
+            Optional<String> result = name.showAndWait();
+            if (result.isPresent()) {
+                clientFunctional.updateConfig(1, result.get());
+            }
+        });
+
         darkButton.setOnAction((event) -> {
             Stage stage = (Stage) darkButton.getScene().getWindow();
             stage.close();
             Parent root = null;
             if(stage.getTitle().equals("Chat")){
-                root = SceneChanger.changeScene("ChatDarkChat.fxml");
+                if(clientFunctional.username.equals("admin")){
+                    root = SceneChanger.changeScene("ChatAdminDarkChat.fxml");
+                } else {
+                    root = SceneChanger.changeScene("ChatDarkChat.fxml");
+                }
                 stage.setTitle("DarkChat");
             } else {
-                root = SceneChanger.changeScene("ChatChat.fxml");
+                if(clientFunctional.username.equals("admin")){
+                    root = SceneChanger.changeScene("ChatAdminChat.fxml");
+                } else {
+                    root = SceneChanger.changeScene("ChatChat.fxml");
+                }
                 stage.setTitle("Chat");
             }
             stage.setScene(new Scene(root));
@@ -122,7 +184,7 @@ public class ChatChatController {
         }
 
         public void displayMessage(Message message) {
-            int lengthAddress = message.getFrom().length() + message.getFullFormattedDate().length() + 1;
+            int lengthAddress = message.getFrom().length() + message.getFullFormattedDate().length() + 3;
             int rows = message.getContent().length() / 44 + 1;
             Label messageLabel = new Label();
             if(message.getFrom().equals(clientFunctional.username)){
@@ -138,9 +200,9 @@ public class ChatChatController {
             timeLabel.setMinSize(lengthAddress * 6, 20);
             timeLabel.setLayoutY(miny + 35 * rows);
             timeLabel.setLayoutX(435 - lengthAddress * 6);
-            timeLabel.setText(message.getFrom() + ": " + message.getFullFormattedDate());
+            timeLabel.setText(message.getId() + ": " + message.getFrom() + ": " + message.getFullFormattedDate());
             miny += (35 * rows) + 30;
-            if ((miny - 15) % 6 == 0){
+            if (miny + 35> chat.getPrefHeight()) {
                 chat.setPrefHeight(chat.getPrefHeight() + 400);
             }
             chat.getChildren().add(messageLabel);

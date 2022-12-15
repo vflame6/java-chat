@@ -20,23 +20,24 @@
          </children></AnchorPane>
       <AnchorPane layoutX="100.0" prefHeight="550.0" prefWidth="249.0" style="-fx-background-color: #D9B08C;" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="0.0">
          <children>
-            <TextField layoutX="38.0" layoutY="17.0" prefHeight="34.0" prefWidth="199.0" promptText="Search..." style="-fx-background-color: #D1E8E2; -fx-background-radius: 10;" AnchorPane.leftAnchor="38.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="17.0" />
+            <TextField fx:id="searchString" layoutX="38.0" layoutY="17.0" prefHeight="34.0" prefWidth="199.0" promptText="Search..." style="-fx-background-color: #D1E8E2; -fx-background-radius: 10;" AnchorPane.leftAnchor="38.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="17.0" />
             <ImageView fitHeight="34.0" fitWidth="26.0" layoutX="9.0" layoutY="21.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@/resources/search.png" />
                </image>
             </ImageView>
-            <AnchorPane layoutX="9.0" layoutY="82.0" prefHeight="77.0" prefWidth="230.0" style="-fx-background-color: #D1E8E2; -fx-background-radius: 10;">
+            <AnchorPane fx:id="chatPane" layoutX="9.0" layoutY="82.0" prefHeight="77.0" prefWidth="230.0" style="-fx-background-color: #D1E8E2; -fx-background-radius: 10;">
                <children>
                   <ImageView fitHeight="60.0" fitWidth="76.0" layoutX="10.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@/resources/users.png" />
                      </image>
                   </ImageView>
-                  <Label fx:id="chatName1" layoutX="70.0" layoutY="14.0" prefHeight="26.0" prefWidth="160.0" style="-fx-background-color: #D1E8E2; -fx-background-radius: 1;" text="  Вторячки" />
-                  <Label fx:id="userTimeLabel" layoutX="70.0" layoutY="39.0" prefHeight="26.0" prefWidth="160.0" style="-fx-background-color: #D1E8E2; -fx-background-radius: 1;" text="  time" />
+                  <Label fx:id="chatName1" layoutX="80.0" layoutY="14.0" prefHeight="26.0" prefWidth="150.0" style="-fx-background-color: #D1E8E2; -fx-background-radius: 1;" />
+                  <Label fx:id="userTimeString" layoutX="70.0" layoutY="39.0" prefHeight="26.0" prefWidth="160.0" style="-fx-background-color: #D1E8E2; -fx-background-radius: 1;" />
                </children>
             </AnchorPane>
+            <Button fx:id="searchButton" layoutY="17.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="34.0" style="-fx-background-color: #D1E8E2;" />
          </children>
       </AnchorPane>
       <ScrollPane layoutX="350.0" layoutY="65.0" prefHeight="400.0" prefWidth="450.0" style="-fx-background-color: #D9B08C;">
@@ -55,7 +56,7 @@
          <children>
             <AnchorPane layoutX="13.0" layoutY="8.0" prefHeight="46.0" prefWidth="426.0" style="-fx-background-color: #D1E8E2; -fx-background-radius: 10;">
                <children>
-                  <Label fx:id="chatName" layoutX="81.0" layoutY="8.0" prefHeight="34.0" prefWidth="278.0" text="Вторячки">
+                  <Label fx:id="chatName" layoutX="81.0" layoutY="8.0" prefHeight="34.0" prefWidth="278.0">
                      <font>
                         <Font name="Calisto MT" size="21.0" />
                      </font>

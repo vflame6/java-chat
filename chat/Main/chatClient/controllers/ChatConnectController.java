@@ -36,7 +36,11 @@ public class ChatConnectController {
                         String cookie = clientFunctional.clientCookies.getCookie();
                         if (clientFunctional.loginCookie(cookie)) {
                             stage.close();
-                            root = SceneChanger.changeScene("ChatChat.fxml");
+                            if(clientFunctional.username.equals("admin")){
+                                root = SceneChanger.changeScene("ChatAdminChat.fxml");
+                            } else {
+                                root = SceneChanger.changeScene("ChatChat.fxml");
+                            }
                             stage.setScene(new Scene(root));
                             stage.setTitle("Chat");
                             stage.show();
