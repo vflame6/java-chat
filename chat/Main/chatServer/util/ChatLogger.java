@@ -1,4 +1,4 @@
-package chat.Main.chatServer;
+package chat.Main.chatServer.util;
 
 import java.io.FileWriter;
 import java.io.IOException;

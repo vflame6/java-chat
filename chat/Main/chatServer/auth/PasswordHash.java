@@ -1,6 +1,5 @@
-package chat.Main.chatServer;
+package chat.Main.chatServer.auth;
 
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;

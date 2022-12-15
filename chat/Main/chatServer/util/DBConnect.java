@@ -1,5 +1,6 @@
-package chat.Main.chatServer;
+package chat.Main.chatServer.util;
 
+import chat.Main.chatServer.auth.User;
 import org.sqlite.SQLiteConfig;
 
 import java.sql.*;
@@ -179,6 +180,7 @@ public class DBConnect {
     // Метод для поиска пользователя в таблице users по его id
     public static User getUser(int searchId) {
         String sql = "SELECT * FROM users WHERE id = ? LIMIT 1";
+
         try (Connection connection = getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, searchId);
@@ -272,6 +274,38 @@ public class DBConnect {
             e.printStackTrace();
         }
         return result;
+    }
+
+    public static void deleteUser(int id) {
+        if (id == 1) {
+            return;
+        }
+
+        String sql = "DELETE FROM users WHERE id = ?";
+
+        try (Connection connection = getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteUser(String username) {
+        if (username.equals("admin")) {
+            return;
+        }
+
+        String sql = "DELETE FROM users WHERE username = ?";
+
+        try (Connection connection = getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, username);
+            preparedStatement.executeUpdate();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     // Метод для создания сообщения в таблице mails
@@ -399,8 +433,10 @@ public class DBConnect {
                 Timestamp now = Timestamp.valueOf(LocalDateTime.now());
 
                 if ((now.getTime() - time.getTime()) / 1000 < 86400) {
+                    connection.close();
                     return getUser(userId);
                 } else {
+                    connection.close();
                     deleteSession(value);
                     return null;
                 }

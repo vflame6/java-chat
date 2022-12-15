@@ -10,7 +10,13 @@ import javax.net.ssl.*;
 import chat.Main.ChatCommands;
 import chat.Main.InvalidTelephoneException;
 import chat.Main.Message;
-import chat.Main.Telephone;
+import chat.Main.chatServer.auth.Telephone;
+import chat.Main.chatServer.auth.User;
+import chat.Main.chatServer.util.ChatLogger;
+import chat.Main.chatServer.util.DBConnect;
+import chat.Main.chatServer.util.Encryptor;
+import chat.Main.chatServer.auth.PasswordHash;
+import chat.Main.chatServer.auth.ServerCookies;
 
 public class ChatThread extends Thread implements ChatCommands {
     private final SSLSocket sslSocket;
@@ -39,9 +45,9 @@ public class ChatThread extends Thread implements ChatCommands {
         while (true) {
             try {
                 line = inp.readLine();
-                parseCommand(line);
                 System.out.println(sslSocket.getInetAddress() + " " + line);
                 ChatLogger.logAccess(sslSocket.getInetAddress(), line);
+                parseCommand(line);
             } catch (IOException e) {
                 System.out.println("Connection closed from: " +
                         sslSocket.getRemoteSocketAddress());

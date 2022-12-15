@@ -1,4 +1,4 @@
-package chat.Main.chatServer;
+package chat.Main.chatServer.auth;
 
 public class User {
     private final int id;

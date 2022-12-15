@@ -1,4 +1,4 @@
-package chat.Main.chatClient;
+package chat.Main.chatClient.util;
 
 public class AuthenticationRequiredException extends RuntimeException {
     public AuthenticationRequiredException(String message) {

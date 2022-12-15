@@ -1,7 +1,6 @@
-package chat.Main.chatServer;
+package chat.Main.chatServer.util;
 
 import javax.crypto.Cipher;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

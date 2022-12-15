@@ -3,13 +3,15 @@ package chat.Main.chatClient;
 import chat.Main.ChatCommands;
 import chat.Main.InvalidTelephoneException;
 import chat.Main.Message;
+import chat.Main.chatClient.util.AuthenticationRequiredException;
+import chat.Main.chatClient.util.ClientCookies;
+import chat.Main.chatClient.util.NoAdminRightsException;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.io.*;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Objects;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
