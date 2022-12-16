@@ -1,10 +1,12 @@
 package chat.Main.chatClient.controllers;
+
 import chat.Main.Message;
 import chat.Main.chatClient.ClientFunctional;
 import chat.Main.chatClient.util.AuthenticationRequiredException;
 import chat.Main.chatClient.util.ClientHolder;
 import chat.Main.chatClient.util.SceneChanger;
 import chat.Main.chatClient.util.TextProcessor;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -14,8 +16,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.scene.input.KeyCode;
+
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -56,9 +61,11 @@ public class ChatChatController {
     private int minx = 5;
     private int miny = 15;
     private Timestamp time;
+    private KeyCode lastKey;
 
     @FXML
     void initialize() {
+
         try {
             loadButtonImages();
             loadConfig();
@@ -68,65 +75,39 @@ public class ChatChatController {
         } catch (AuthenticationRequiredException e) {
             logoutAction();
         }
-
-        searchButton.setOnAction((event) -> {
-            if ((searchString.getText()).equals(clientFunctional.chatName)) {
-                chatPane.setStyle("-fx-background-color: #D1E8E2;-fx-background-radius:10; -fx-border-width: 3; -fx-border-color: #116466; -fx-border-radius: 10;");
-            }
-            searchString.clear();
-        });
-
-        updateButton.setOnAction((event) -> {
-            try {
-                loadConfig();
-                clientFunctional.getLastMessageTimestamp();
-                if (clientFunctional.lastMessageTimestamp.compareTo(time) != 0) {
-                    loadMessages();
+        enterMessage.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @FXML
+            public void handle(KeyEvent event) {
+                switch (event.getCode()) {
+                    case ENTER:
+                        sendButtonAction();
+                        break;
+                    case ESCAPE:
+                        logoutButtonAction();
+                        break;
+                    case R:
+                        if(lastKey==KeyCode.CONTROL){updateButtonAction();}
+                        break;
+                    default:
+                        lastKey=event.getCode();
+                        break;
                 }
-            } catch (AuthenticationRequiredException e) {
-                logoutAction();
+
             }
         });
 
-        sendButton.setOnAction((event) -> {
-            try {
-                String message = enterMessage.getText();
-                if (!message.equals("")) {
-                    for (String singleMessage : TextProcessor.separateMessages(message)) {
-                        clientFunctional.sendMessage(singleMessage);
-                    }
-                }
-                enterMessage.clear();
-            } catch (AuthenticationRequiredException e) {
-                logoutAction();
-            }
-        });
-
+        searchButton.setOnAction((event) -> searchButtonAction());
+        updateButton.setOnAction((event) -> updateButtonAction());
+        sendButton.setOnAction((event) -> sendButtonAction());
         logOutButton.setOnAction((event) -> logoutButtonAction());
+        changeNameButton.setOnAction((event) -> changeNameButtonAction());
+        darkButton.setOnAction((event) -> darkButtonAction());
+
 
         if (clientFunctional.username.equals("admin")) {
             loadAdminInterface();
         }
 
-        changeNameButton.setOnAction((event) -> {
-            try {
-                TextInputDialog name = new TextInputDialog();
-                name.setTitle("Изменить название беседы");
-                name.setContentText("Пожалуйста, введите новое название:");
-                Optional<String> result = name.showAndWait();
-                if (result.isPresent()) {
-                    clientFunctional.updateConfig(1, result.get());
-                }
-            } catch (AuthenticationRequiredException e) {
-                logoutAction();
-            }
-        });
-
-        darkButton.setOnAction((event) -> {
-            Stage stage = (Stage) darkButton.getScene().getWindow();
-            stage.close();
-            changeTheme(stage);
-        });
     }
 
     public void displayMessage(Message message) {
@@ -134,7 +115,7 @@ public class ChatChatController {
         int rows = message.getContent().length() / 44 + 1;
         Label messageLabel = new Label();
 
-        if (message.getFrom().equals(clientFunctional.username)){
+        if (message.getFrom().equals(clientFunctional.username)) {
             messageLabel.setStyle("-fx-background-color:  #77ACA5; -fx-background-radius: 10");
         } else {
             messageLabel.setStyle("-fx-background-color: #B7D8CF; -fx-background-radius: 10");
@@ -151,7 +132,7 @@ public class ChatChatController {
         timeLabel.setLayoutX(435 - lengthAddress * 6);
         timeLabel.setText(message.getId() + ": " + message.getFrom() + ": " + message.getFullFormattedDate());
         miny += (35 * rows) + 30;
-        if (miny + 35> chat.getPrefHeight()) {
+        if (miny + 35 > chat.getPrefHeight()) {
             chat.setPrefHeight(chat.getPrefHeight() + 400);
         }
         chat.getChildren().add(messageLabel);
@@ -160,15 +141,15 @@ public class ChatChatController {
 
     // Загрузить и отобразить картинки на кнопках
     private void loadButtonImages() {
-        ImageView update = new ImageView(new Image("/resources/update.png",32,28,false,false));
+        ImageView update = new ImageView(new Image("/resources/update.png", 32, 28, false, false));
         updateButton.graphicProperty().setValue(new ImageView(update.getImage()));
-        ImageView home = new ImageView(new Image("/resources/home.png",32,28,false,false));
+        ImageView home = new ImageView(new Image("/resources/home.png", 32, 28, false, false));
         logOutButton.graphicProperty().setValue(new ImageView(home.getImage()));
-        ImageView theme = new ImageView(new Image("/resources/theme.png",32,28,false,false));
+        ImageView theme = new ImageView(new Image("/resources/theme.png", 32, 28, false, false));
         darkButton.graphicProperty().setValue(new ImageView(theme.getImage()));
-        ImageView send = new ImageView(new Image("/resources/send.png",32,28,false,false));
+        ImageView send = new ImageView(new Image("/resources/send.png", 32, 28, false, false));
         sendButton.graphicProperty().setValue(new ImageView(send.getImage()));
-        ImageView search = new ImageView(new Image("/resources/search.png",25,25,false,false));
+        ImageView search = new ImageView(new Image("/resources/search.png", 25, 25, false, false));
         searchButton.graphicProperty().setValue(new ImageView(search.getImage()));
     }
 
@@ -195,6 +176,7 @@ public class ChatChatController {
     }
 
     private void loadAdminInterface() {
+
         deleteButton.setOnAction((event) -> {
             TextInputDialog name = new TextInputDialog();
             name.setTitle("Удалить сообщение");
@@ -204,6 +186,7 @@ public class ChatChatController {
                 clientFunctional.deleteMessage(Integer.parseInt(result.get()));
             }
         });
+
 
         banButton.setOnAction((event) -> {
             TextInputDialog name = new TextInputDialog();
@@ -237,6 +220,13 @@ public class ChatChatController {
         stage.show();
     }
 
+    private void searchButtonAction() {
+        if ((searchString.getText()).equals(clientFunctional.chatName)) {
+            chatPane.setStyle("-fx-background-color: #D1E8E2;-fx-background-radius:10; -fx-border-width: 3; -fx-border-color: #116466; -fx-border-radius: 10;");
+        }
+        searchString.clear();
+    }
+
     private void logoutButtonAction() {
         Stage stage = (Stage) logOutButton.getScene().getWindow();
         stage.close();
@@ -246,6 +236,52 @@ public class ChatChatController {
         String cookie = clientFunctional.clientCookies.getCookie();
         clientFunctional.logout(cookie);
         stage.show();
+    }
+
+    private void updateButtonAction() {
+        try {
+            loadConfig();
+            clientFunctional.getLastMessageTimestamp();
+            if (clientFunctional.lastMessageTimestamp.compareTo(time) != 0) {
+                loadMessages();
+            }
+        } catch (AuthenticationRequiredException e) {
+            logoutAction();
+        }
+    }
+
+    private void sendButtonAction() {
+        try {
+            String message = enterMessage.getText();
+            if (!message.equals("")) {
+                for (String singleMessage : TextProcessor.separateMessages(message)) {
+                    clientFunctional.sendMessage(singleMessage);
+                }
+            }
+            enterMessage.clear();
+        } catch (AuthenticationRequiredException e) {
+            logoutAction();
+        }
+    }
+
+    private void changeNameButtonAction() {
+        try {
+            TextInputDialog name = new TextInputDialog();
+            name.setTitle("Изменить название беседы");
+            name.setContentText("Пожалуйста, введите новое название:");
+            Optional<String> result = name.showAndWait();
+            if (result.isPresent()) {
+                clientFunctional.updateConfig(1, result.get());
+            }
+        } catch (AuthenticationRequiredException e) {
+            logoutAction();
+        }
+    }
+
+    private void darkButtonAction() {
+        Stage stage = (Stage) darkButton.getScene().getWindow();
+        stage.close();
+        changeTheme(stage);
     }
 
     private void logoutAction() {
@@ -258,4 +294,3 @@ public class ChatChatController {
         stage.show();
     }
 }
-

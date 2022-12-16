@@ -3,12 +3,14 @@ package chat.Main.chatClient.controllers;
 import chat.Main.chatClient.ClientFunctional;
 import chat.Main.chatClient.util.ClientHolder;
 import chat.Main.chatClient.util.SceneChanger;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 import java.net.UnknownHostException;
@@ -24,28 +26,21 @@ public class ChatConnectController {
     private String ip;
     @FXML
     void initialize() {
-        connectButton.setOnAction((event) -> {
-            ip = ipString.getText();
-            Stage stage = (Stage) connectButton.getScene().getWindow();
-            Parent root = null;
-            try {
-                ClientFunctional clientFunctional = ClientFunctional.tryToConnect(ip);
-                clientHolder.setClient(clientFunctional);
+        ipString.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @FXML
+            public void handle(KeyEvent event) {
 
-                if (clientFunctional.clientCookies.isCookieExists()) {
-                    tryToLogInWithCookie(stage, clientFunctional);
-                } else {
-                    stage.close();
-                    root = SceneChanger.changeScene("ChatLogIn.fxml");
-                    stage.setScene(new Scene(root));
-                    stage.show();
+                switch(event.getCode()) {
+                    case ENTER:
+                        connectButtonAction();
+                        break;
+                    default:
+                        break;
                 }
-            } catch (UnknownHostException e) {
-                connectString.setText("                IP адресс не верный, попробуйте еще раз");
             }
         });
+        connectButton.setOnAction((event) -> connectButtonAction());
     }
-
     private void tryToLogInWithCookie(Stage stage, ClientFunctional clientFunctional) {
         String cookie = clientFunctional.clientCookies.getCookie();
         Parent root;
@@ -64,6 +59,26 @@ public class ChatConnectController {
             root = SceneChanger.changeScene("ChatLogIn.fxml");
             stage.setScene(new Scene(root));
             stage.show();
+        }
+    }
+    private void connectButtonAction(){
+        ip = ipString.getText();
+        Stage stage = (Stage) connectButton.getScene().getWindow();
+        Parent root = null;
+        try {
+            ClientFunctional clientFunctional = ClientFunctional.tryToConnect(ip);
+            clientHolder.setClient(clientFunctional);
+
+            if (clientFunctional.clientCookies.isCookieExists()) {
+                tryToLogInWithCookie(stage, clientFunctional);
+            } else {
+                stage.close();
+                root = SceneChanger.changeScene("ChatLogIn.fxml");
+                stage.setScene(new Scene(root));
+                stage.show();
+            }
+        } catch (UnknownHostException e) {
+            connectString.setText("                IP адресс не верный, попробуйте еще раз");
         }
     }
 }
