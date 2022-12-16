@@ -147,6 +147,16 @@ public class ChatChatController {
                     clientFunctional.deleteMessage(Integer.valueOf(result.get()));
                 }
             });
+
+            banButton.setOnAction((event) -> {
+                TextInputDialog name = new TextInputDialog();
+                name.setTitle("Удалить пользователя");
+                name.setContentText("Пожалуйста, напишите имя пользователя, которого хотите удалить:");
+                Optional<String> result = name.showAndWait();
+                if (result.isPresent()) {
+                    clientFunctional.deleteUser(result.get());
+                }
+            });
         }
 
         changeNameButton.setOnAction((event) -> {

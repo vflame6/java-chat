@@ -171,7 +171,7 @@ public class ClientFunctional implements ChatCommands {
                 return true;
             } else if (result[0].equals("AUTHENTICATION_REQUIRED")) {
                 // AUTHENTICATION_REQUIRED;
-                throw  new AuthenticationRequiredException("No authentication");
+                throw new AuthenticationRequiredException("No authentication");
             } else {
                 // NO_SUCH_CONFIG;
                 return false;
@@ -337,27 +337,24 @@ public class ClientFunctional implements ChatCommands {
     }
     // Удаление пользователя по username
     public boolean deleteUser(String username){
-        String command = "DELETE_USER;" + username + "\n";
-        try{
+        String command = "DELETE_USER;" + username.trim() + "\n";
+
+        try {
             out.write(command.getBytes());
             String result = inp.readLine();
             return switch (result){
                 case "OK;" ->
                     // OK;
                         true;
-                case "INVALID_USERNAME" ->
+                case "INVALID_USERNAME;" ->
                     //INVALID_USERNAME
                         false;
                 case "NO_ADMIN_RIGHTS;" ->
                     // NO_ADMIN_RIGHTS;
                         throw new NoAdminRightsException("No admin rights");
                 default -> false;
-
             };
-
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException();
         }

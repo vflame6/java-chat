@@ -459,4 +459,16 @@ public class DBConnect {
             e.printStackTrace();
         }
     }
+
+    public static void deleteUserSessions(int userId) {
+        String sql = "DELETE FROM sessions WHERE user_id = ?";
+
+        try (Connection connection = getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.executeUpdate();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

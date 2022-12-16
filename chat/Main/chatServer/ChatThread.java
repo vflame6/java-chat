@@ -23,8 +23,10 @@ public class ChatThread extends Thread implements ChatCommands {
     private InputStream SSLSocketInputStream = null;
     private BufferedReader inp = null;
     private DataOutputStream out = null;
+    private String username;
     private boolean authenticatedState = false;
     private boolean adminState = false;
+    private Timestamp lastChangeTimestamp;
     private static final ServerCookies serverCookies = new ServerCookies();
     private static final Encryptor encryptor = new Encryptor();
     public ChatThread(SSLSocket sslSocket) {
@@ -41,6 +43,8 @@ public class ChatThread extends Thread implements ChatCommands {
             return;
         }
 
+        updateLastChangeTimestamp();
+
         String line;
         while (true) {
             try {
@@ -54,6 +58,10 @@ public class ChatThread extends Thread implements ChatCommands {
                 return;
             }
         }
+    }
+
+    private void updateLastChangeTimestamp() {
+        lastChangeTimestamp = new Timestamp(System.currentTimeMillis());
     }
 
     private void parseCommand(String line) throws IOException {
@@ -123,8 +131,7 @@ public class ChatThread extends Thread implements ChatCommands {
                 int messageId = Integer.parseInt(id);
                 deleteMessage(messageId);
             }
-            case("DELETE_USER")->
-            {
+            case("DELETE_USER") -> {
                 String username = command[1];
                 deleteUser(username);
             }
@@ -162,6 +169,7 @@ public class ChatThread extends Thread implements ChatCommands {
             return false;
         }
 
+        username = user.getUsername();
         authenticatedState = true;
         adminState = user.getIsAdmin() == 1;
 
@@ -188,6 +196,7 @@ public class ChatThread extends Thread implements ChatCommands {
             return false;
         }
 
+        username = user.getUsername();
         authenticatedState = true;
         adminState = user.getIsAdmin() == 1;
 
@@ -276,6 +285,7 @@ public class ChatThread extends Thread implements ChatCommands {
         }
 
         DBConnect.updateConfig(id, chatName);
+        updateLastChangeTimestamp();
 
         output = "OK;\n";
         out.write(output.getBytes());
@@ -322,14 +332,7 @@ public class ChatThread extends Thread implements ChatCommands {
             return false;
         }
 
-        Message lastMessage = DBConnect.getLastMessage();
-        if (Objects.isNull(lastMessage)) {
-            output = "NO_MESSAGES;\n";
-            out.write(output.getBytes());
-            return false;
-        }
-
-        output = "OK;" + lastMessage.getTimestamp() + "\n";
+        output = "OK;" + lastChangeTimestamp + "\n";
         out.write(output.getBytes());
         return true;
     }
@@ -394,6 +397,7 @@ public class ChatThread extends Thread implements ChatCommands {
 
         output = "OK;\n";
         out.write(output.getBytes());
+        updateLastChangeTimestamp();
         ChatLogger.logMessage(message.getFrom(), encryptedContent);
         return true;
     }
@@ -421,6 +425,7 @@ public class ChatThread extends Thread implements ChatCommands {
         }
 
         DBConnect.deleteMessage(message.getId());
+        updateLastChangeTimestamp();
 
         output = "OK;\n";
         out.write(output.getBytes());
@@ -437,20 +442,22 @@ public class ChatThread extends Thread implements ChatCommands {
         if (!isAuthenticated() && !isAdmin()) {
             return false;
         }
+
         String output;
         User user = DBConnect.getUser(username);
+
         if (Objects.isNull(user)) {
-            output = "INVALID_USERNAME;";
+            output = "INVALID_USERNAME;\n";
             out.write(output.getBytes());
             return false;
-        } else {
-            DBConnect.deleteUser(username);
-            output = "OK;";
-            out.write(output.getBytes());
-            return true;
-
         }
 
+        DBConnect.deleteUserSessions(user.getId());
+        DBConnect.deleteUser(username);
+
+        output = "OK;\n";
+        out.write(output.getBytes());
+        return true;
     }
 
     // Any invalid command:
@@ -461,7 +468,7 @@ public class ChatThread extends Thread implements ChatCommands {
     }
 
     private boolean isAuthenticated() throws IOException {
-        if (!authenticatedState) {
+        if (!authenticatedState && !Objects.isNull(DBConnect.getUser(username))) {
             String output = "AUTHENTICATION_REQUIRED;\n";
             out.write(output.getBytes());
             return false;
