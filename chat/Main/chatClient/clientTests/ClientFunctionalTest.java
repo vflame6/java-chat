@@ -1,6 +1,6 @@
 package chat.Main.chatClient.clientTests;
 
-import chat.Main.InvalidTelephoneException;
+import chat.Main.chatClient.util.InvalidTelephoneException;
 import chat.Main.chatClient.util.AuthenticationRequiredException;
 import chat.Main.chatClient.ClientFunctional;
 import chat.Main.chatClient.util.NoAdminRightsException;

@@ -8,7 +8,7 @@ import java.util.Objects;
 import javax.net.ssl.*;
 
 import chat.Main.ChatCommands;
-import chat.Main.InvalidTelephoneException;
+import chat.Main.chatServer.auth.InvalidTelephoneException;
 import chat.Main.Message;
 import chat.Main.chatServer.auth.Telephone;
 import chat.Main.chatServer.auth.User;
@@ -169,9 +169,9 @@ public class ChatThread extends Thread implements ChatCommands {
             return false;
         }
 
-        username = user.getUsername();
-        authenticatedState = true;
-        adminState = user.getIsAdmin() == 1;
+        this.username = user.getUsername();
+        this.authenticatedState = true;
+        this.adminState = user.getIsAdmin() == 1;
 
         String sessionCookie = serverCookies.getCookie();
         DBConnect.createSession(user.getId(), sessionCookie);
@@ -196,9 +196,9 @@ public class ChatThread extends Thread implements ChatCommands {
             return false;
         }
 
-        username = user.getUsername();
-        authenticatedState = true;
-        adminState = user.getIsAdmin() == 1;
+        this.username = user.getUsername();
+        this.authenticatedState = true;
+        this.adminState = user.getIsAdmin() == 1;
 
         output = "OK;" + user.getUsername() + " " + adminState + "\n";
         out.write(output.getBytes());
@@ -312,8 +312,9 @@ public class ChatThread extends Thread implements ChatCommands {
         }
 
         DBConnect.deleteSession(cookieValue);
-        authenticatedState = false;
-        adminState = false;
+        this.username = null;
+        this.authenticatedState = false;
+        this.adminState = false;
 
         output = "OK;\n";
         out.write(output.getBytes());
@@ -468,13 +469,13 @@ public class ChatThread extends Thread implements ChatCommands {
     }
 
     private boolean isAuthenticated() throws IOException {
-        if (!authenticatedState && !Objects.isNull(DBConnect.getUser(username))) {
-            String output = "AUTHENTICATION_REQUIRED;\n";
+        String output = "AUTHENTICATION_REQUIRED;\n";
+
+        if (!authenticatedState || Objects.isNull(username) || Objects.isNull(DBConnect.getUser(username))) {
             out.write(output.getBytes());
             return false;
-        } else {
-            return true;
         }
+        return true;
     }
 
     private boolean isAdmin() throws IOException {

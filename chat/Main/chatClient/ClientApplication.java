@@ -1,5 +1,6 @@
 package chat.Main.chatClient;
 
+import chat.Main.chatClient.util.SceneChanger;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

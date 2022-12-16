@@ -14,5 +14,6 @@ public interface ChatCommands {
     boolean getMessages() throws IOException;
     boolean sendMessage(String message) throws IOException;
     boolean deleteMessage(int id) throws IOException;
+    boolean deleteUser(String username) throws IOException;
     boolean invalidCommand() throws IOException;
 }

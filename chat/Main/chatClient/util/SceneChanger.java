@@ -1,4 +1,4 @@
-package chat.Main.chatClient;
+package chat.Main.chatClient.util;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,7 +13,7 @@ public class SceneChanger {
         try {
             File file = new File("resources/" + fileName);
             URL url = new URL("file:/" + file.getAbsolutePath());
-            return (Parent) FXMLLoader.load(Objects.requireNonNull(url));
+            return FXMLLoader.load(Objects.requireNonNull(url));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

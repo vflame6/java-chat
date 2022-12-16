@@ -1,4 +1,6 @@
-package chat.Main.chatClient;
+package chat.Main.chatClient.util;
+
+import chat.Main.chatClient.ClientFunctional;
 
 public class ClientHolder {
     private ClientFunctional clientFunctional;

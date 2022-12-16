@@ -1,7 +1,7 @@
 package chat.Main.chatClient;
 
 import chat.Main.ChatCommands;
-import chat.Main.InvalidTelephoneException;
+import chat.Main.chatClient.util.InvalidTelephoneException;
 import chat.Main.Message;
 import chat.Main.chatClient.util.AuthenticationRequiredException;
 import chat.Main.chatClient.util.ClientCookies;
@@ -335,6 +335,7 @@ public class ClientFunctional implements ChatCommands {
             throw new RuntimeException(e);
         }
     }
+
     // Удаление пользователя по username
     public boolean deleteUser(String username){
         String command = "DELETE_USER;" + username.trim() + "\n";
@@ -365,9 +366,20 @@ public class ClientFunctional implements ChatCommands {
         return true;
     }
 
+    // Попробовать открыть соединение с сервером и вернуть объект клиента
+    public static ClientFunctional tryToConnect(String ip) throws UnknownHostException {
+        ClientFunctional clientFunctional = new ClientFunctional(ip);
+        if (clientFunctional.ping()) {
+            return clientFunctional;
+        } else {
+            throw new UnknownHostException();
+        }
+    }
+
     // Закрыть соеденение с сервером
     public void closeConnection() {
         try {
+            ip = null;
             inp.close();
             out.close();
             sslSocket.close();

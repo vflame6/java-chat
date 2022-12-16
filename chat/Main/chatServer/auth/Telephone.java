@@ -1,7 +1,5 @@
 package chat.Main.chatServer.auth;
 
-import chat.Main.InvalidTelephoneException;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

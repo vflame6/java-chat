@@ -1,8 +1,8 @@
 package chat.Main.chatClient.controllers;
 
 import chat.Main.chatClient.ClientFunctional;
-import chat.Main.chatClient.ClientHolder;
-import chat.Main.chatClient.SceneChanger;
+import chat.Main.chatClient.util.ClientHolder;
+import chat.Main.chatClient.util.SceneChanger;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -27,42 +27,43 @@ public class ChatConnectController {
         connectButton.setOnAction((event) -> {
             ip = ipString.getText();
             Stage stage = (Stage) connectButton.getScene().getWindow();
-            Parent root;
+            Parent root = null;
             try {
-                ClientFunctional clientFunctional = new ClientFunctional(ip);
-                if (clientFunctional.ping()) {
-                    clientHolder.setClient(clientFunctional);
-                    if (clientFunctional.clientCookies.isCookieExists()) {
-                        String cookie = clientFunctional.clientCookies.getCookie();
-                        if (clientFunctional.loginCookie(cookie)) {
-                            stage.close();
-                            if(clientFunctional.username.equals("admin")){
-                                root = SceneChanger.changeScene("ChatAdminChat.fxml");
-                            } else {
-                                root = SceneChanger.changeScene("ChatChat.fxml");
-                            }
-                            stage.setScene(new Scene(root));
-                            stage.setTitle("Chat");
-                            stage.show();
-                        } else {
-                            stage.close();
-                            root = SceneChanger.changeScene("ChatLogIn.fxml");
-                            stage.setScene(new Scene(root));
-                            stage.show();
-                        }
-                    } else {
-                        stage.close();
-                        root = SceneChanger.changeScene("ChatLogIn.fxml");
-                        stage.setScene(new Scene(root));
-                        stage.show();
-                    }
+                ClientFunctional clientFunctional = ClientFunctional.tryToConnect(ip);
+                clientHolder.setClient(clientFunctional);
 
+                if (clientFunctional.clientCookies.isCookieExists()) {
+                    tryToLogInWithCookie(stage, clientFunctional);
                 } else {
-                    throw new UnknownHostException();
+                    stage.close();
+                    root = SceneChanger.changeScene("ChatLogIn.fxml");
+                    stage.setScene(new Scene(root));
+                    stage.show();
                 }
             } catch (UnknownHostException e) {
                 connectString.setText("                IP адресс не верный, попробуйте еще раз");
             }
         });
+    }
+
+    private void tryToLogInWithCookie(Stage stage, ClientFunctional clientFunctional) {
+        String cookie = clientFunctional.clientCookies.getCookie();
+        Parent root;
+        if (clientFunctional.loginCookie(cookie)) {
+            stage.close();
+            if (clientFunctional.username.equals("admin")) {
+                root = SceneChanger.changeScene("ChatAdminChat.fxml");
+            } else {
+                root = SceneChanger.changeScene("ChatChat.fxml");
+            }
+            stage.setScene(new Scene(root));
+            stage.setTitle("Chat");
+            stage.show();
+        } else {
+            stage.close();
+            root = SceneChanger.changeScene("ChatLogIn.fxml");
+            stage.setScene(new Scene(root));
+            stage.show();
+        }
     }
 }
