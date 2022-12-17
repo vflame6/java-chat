@@ -39,7 +39,9 @@ public class ChatRegistrationController {
     @FXML
     void initialize() {
 
-
+        // Чтение ввода кнопок с поля ввода пароля
+        // Enter-отправить запрос на регистрацию с введенными данными
+        // Escape- выйти к логину
         passwordRepeatString.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @FXML
             public void handle(KeyEvent event) {

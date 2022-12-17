@@ -75,6 +75,11 @@ public class ChatChatController {
         } catch (AuthenticationRequiredException e) {
             logoutAction();
         }
+        // Чтение ввода кнопок с поля ввода сообщений
+        // Enter-отправить сообщение
+        // Control+R- обновить список сообщений
+        // Escape-выйти из аккаунта
+
         enterMessage.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @FXML
             public void handle(KeyEvent event) {
@@ -86,10 +91,12 @@ public class ChatChatController {
                         logoutButtonAction();
                         break;
                     case R:
-                        if(lastKey==KeyCode.CONTROL){updateButtonAction();}
+                        if (lastKey == KeyCode.CONTROL) {
+                            updateButtonAction();
+                        }
                         break;
                     default:
-                        lastKey=event.getCode();
+                        lastKey = event.getCode();
                         break;
                 }
 

@@ -26,6 +26,10 @@ public class ChatConnectController {
     private String ip;
     @FXML
     void initialize() {
+        // Чтение ввода кнопок с поля ввода ip-адреса
+        // Enter-отправить запрос на соединение с введеным ip
+        // Escape- выйти из программы
+
         ipString.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @FXML
             public void handle(KeyEvent event) {
@@ -34,6 +38,8 @@ public class ChatConnectController {
                     case ENTER:
                         connectButtonAction();
                         break;
+                    case ESCAPE:
+                        System.exit(0);
                     default:
                         break;
                 }

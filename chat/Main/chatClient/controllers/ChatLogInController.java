@@ -32,7 +32,9 @@ public class ChatLogInController {
 
     @FXML
     void initialize() {
-
+        // Чтение ввода кнопок с поля ввода пароля
+        // Enter-отправить данные для входа
+        // Escape- выйти к выбору соединения
         passwordString.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @FXML
             public void handle(KeyEvent event) {
