@@ -65,7 +65,6 @@ public class ChatChatController {
 
     @FXML
     void initialize() {
-
         try {
             loadButtonImages();
             loadConfig();
@@ -75,11 +74,11 @@ public class ChatChatController {
         } catch (AuthenticationRequiredException e) {
             logoutAction();
         }
+
         // Чтение ввода кнопок с поля ввода сообщений
         // Enter-отправить сообщение
         // Control+R- обновить список сообщений
         // Escape-выйти из аккаунта
-
         enterMessage.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @FXML
             public void handle(KeyEvent event) {
@@ -99,7 +98,6 @@ public class ChatChatController {
                         lastKey = event.getCode();
                         break;
                 }
-
             }
         });
 
@@ -110,11 +108,9 @@ public class ChatChatController {
         changeNameButton.setOnAction((event) -> changeNameButtonAction());
         darkButton.setOnAction((event) -> darkButtonAction());
 
-
         if (clientFunctional.username.equals("admin")) {
             loadAdminInterface();
         }
-
     }
 
     public void displayMessage(Message message) {
@@ -183,7 +179,6 @@ public class ChatChatController {
     }
 
     private void loadAdminInterface() {
-
         deleteButton.setOnAction((event) -> {
             TextInputDialog name = new TextInputDialog();
             name.setTitle("Удалить сообщение");
@@ -192,6 +187,7 @@ public class ChatChatController {
             if (result.isPresent()) {
                 clientFunctional.deleteMessage(Integer.parseInt(result.get()));
             }
+            updateButtonAction();
         });
 
 
@@ -203,6 +199,7 @@ public class ChatChatController {
             if (result.isPresent()) {
                 clientFunctional.deleteUser(result.get());
             }
+            updateButtonAction();
         });
     }
 
@@ -247,9 +244,9 @@ public class ChatChatController {
 
     private void updateButtonAction() {
         try {
-            loadConfig();
             clientFunctional.getLastMessageTimestamp();
             if (clientFunctional.lastMessageTimestamp.compareTo(time) != 0) {
+                loadConfig();
                 loadMessages();
             }
         } catch (AuthenticationRequiredException e) {
@@ -266,6 +263,7 @@ public class ChatChatController {
                 }
             }
             enterMessage.clear();
+            updateButtonAction();
         } catch (AuthenticationRequiredException e) {
             logoutAction();
         }
@@ -280,6 +278,7 @@ public class ChatChatController {
             if (result.isPresent()) {
                 clientFunctional.updateConfig(1, result.get());
             }
+            updateButtonAction();
         } catch (AuthenticationRequiredException e) {
             logoutAction();
         }
@@ -289,6 +288,7 @@ public class ChatChatController {
         Stage stage = (Stage) darkButton.getScene().getWindow();
         stage.close();
         changeTheme(stage);
+        updateButtonAction();
     }
 
     private void logoutAction() {
