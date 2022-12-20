@@ -24,6 +24,7 @@ public class ChatConnectController {
     @FXML
     private TextField ipString;
     private String ip;
+
     @FXML
     void initialize() {
         // Чтение ввода кнопок с поля ввода ip-адреса
@@ -34,19 +35,17 @@ public class ChatConnectController {
             @FXML
             public void handle(KeyEvent event) {
 
-                switch(event.getCode()) {
-                    case ENTER:
-                        connectButtonAction();
-                        break;
-                    case ESCAPE:
-                        System.exit(0);
-                    default:
-                        break;
+                switch (event.getCode()) {
+                    case ENTER -> connectButtonAction();
+                    case ESCAPE -> System.exit(0);
+                    default -> {
+                    }
                 }
             }
         });
         connectButton.setOnAction((event) -> connectButtonAction());
     }
+
     private void tryToLogInWithCookie(Stage stage, ClientFunctional clientFunctional) {
         String cookie = clientFunctional.clientCookies.getCookie();
         Parent root;
@@ -67,7 +66,8 @@ public class ChatConnectController {
             stage.show();
         }
     }
-    private void connectButtonAction(){
+
+    private void connectButtonAction() {
         ip = ipString.getText();
         Stage stage = (Stage) connectButton.getScene().getWindow();
         Parent root = null;

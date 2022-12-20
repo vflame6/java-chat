@@ -47,14 +47,12 @@ public class ChatRegistrationController {
             public void handle(KeyEvent event) {
 
                 switch (event.getCode()) {
-                    case ENTER:
-                        signUpButtonAction();
-                        break;
-                    case ESCAPE:
-                        backButtonAction();
-                        break;
-                    default:
-                        break;
+                    case ENTER -> signUpButtonAction();
+
+                    case ESCAPE -> backButtonAction();
+
+                    default -> {
+                    }
                 }
             }
         });
@@ -73,7 +71,11 @@ public class ChatRegistrationController {
 
         if (!password.equals(passwordrep)) {
             problemString.setText("                                                                 Пароли не совпадают");
-        } else {
+        }
+        if (password.equals("")) {
+         problemString.setText("                                                             Пароль не может быть пустым");
+        }
+        else {
             try {
                 if (clientFunctional.register(login, password, telephone)) {
                     stage.close();

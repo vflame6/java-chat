@@ -40,14 +40,13 @@ public class ChatLogInController {
             public void handle(KeyEvent event) {
 
                 switch (event.getCode()) {
-                    case ENTER:
-                        logInButtonAction();
-                        break;
-                    case ESCAPE:
-                        backButtonAction();
-                        break;
-                    default:
-                        break;
+                    case ENTER -> logInButtonAction();
+
+                    case ESCAPE -> backButtonAction();
+
+                    default -> {
+
+                    }
                 }
             }
         });

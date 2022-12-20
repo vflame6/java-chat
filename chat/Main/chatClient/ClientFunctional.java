@@ -336,7 +336,7 @@ public class ClientFunctional implements ChatCommands {
         }
     }
 
-    // Удаление пользователя по username
+    // Удаление пользователя по username(Только админ)
     public boolean deleteUser(String username){
         String command = "DELETE_USER;" + username.trim() + "\n";
 
