@@ -21,8 +21,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.scene.input.KeyCode;
 
+
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,10 +58,10 @@ public class ChatChatController {
     private Button banButton;
     @FXML
     private Button deleteButton;
+    private int minx = 5;
     private int miny = 15;
     private Timestamp time;
     private KeyCode lastKey;
-    private final List<Label> messageLabels = new ArrayList<>();
 
     @FXML
     void initialize() {
@@ -79,18 +79,24 @@ public class ChatChatController {
         // Enter-отправить сообщение
         // Control+R- обновить список сообщений
         // Escape-выйти из аккаунта
-        enterMessage.setOnKeyPressed(new EventHandler<>() {
+        enterMessage.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @FXML
             public void handle(KeyEvent event) {
                 switch (event.getCode()) {
-                    case ENTER -> sendButtonAction();
-                    case ESCAPE -> logoutButtonAction();
-                    case R -> {
+                    case ENTER:
+                        sendButtonAction();
+                        break;
+                    case ESCAPE:
+                        logoutButtonAction();
+                        break;
+                    case R:
                         if (lastKey == KeyCode.CONTROL) {
                             updateButtonAction();
                         }
-                    }
-                    default -> lastKey = event.getCode();
+                        break;
+                    default:
+                        lastKey = event.getCode();
+                        break;
                 }
             }
         });
@@ -107,12 +113,6 @@ public class ChatChatController {
         }
     }
 
-    private void loadAdminInterface() {
-        deleteButton.setOnAction((event) -> deleteButtonAction());
-        banButton.setOnAction((event) -> banButtonAction());
-    }
-
-    // Отобразить сообщение
     public void displayMessage(Message message) {
         int lengthAddress = message.getFrom().length() + message.getFullFormattedDate().length() + 3;
         int rows = message.getContent().length() / 44 + 1;
@@ -125,7 +125,6 @@ public class ChatChatController {
         }
 
         messageLabel.setMinSize(420, 35 * rows);
-        int minx = 5;
         messageLabel.setLayoutX(minx);
         messageLabel.setLayoutY(miny);
         messageLabel.setText(TextProcessor.processMessage(message.getContent()));
@@ -140,15 +139,7 @@ public class ChatChatController {
             chat.setPrefHeight(chat.getPrefHeight() + 400);
         }
         chat.getChildren().add(messageLabel);
-        messageLabels.add(messageLabel);
         chat.getChildren().add(timeLabel);
-        messageLabels.add(timeLabel);
-    }
-
-    // Стереть все отрисованные сообщения
-    public void clearMessages() {
-        chat.getChildren().removeAll(messageLabels);
-        messageLabels.clear();
     }
 
     // Загрузить и отобразить картинки на кнопках
@@ -185,6 +176,31 @@ public class ChatChatController {
             miny = 15;
             userTimeString.setText("  " + lastMessage.getFrom() + ": " + lastMessage.getMinFormattedDate());
         }
+    }
+
+    private void loadAdminInterface() {
+        deleteButton.setOnAction((event) -> {
+            TextInputDialog name = new TextInputDialog();
+            name.setTitle("Удалить сообщение");
+            name.setContentText("Пожалуйста, напишите id сообщения, которое хотите удалить:");
+            Optional<String> result = name.showAndWait();
+            if (result.isPresent()) {
+                clientFunctional.deleteMessage(Integer.parseInt(result.get()));
+            }
+            updateButtonAction();
+        });
+
+
+        banButton.setOnAction((event) -> {
+            TextInputDialog name = new TextInputDialog();
+            name.setTitle("Удалить пользователя");
+            name.setContentText("Пожалуйста, напишите имя пользователя, которого хотите удалить:");
+            Optional<String> result = name.showAndWait();
+            if (result.isPresent()) {
+                clientFunctional.deleteUser(result.get());
+            }
+            updateButtonAction();
+        });
     }
 
     private void changeTheme(Stage stage) {
@@ -231,7 +247,6 @@ public class ChatChatController {
             clientFunctional.getLastMessageTimestamp();
             if (clientFunctional.lastMessageTimestamp.compareTo(time) != 0) {
                 loadConfig();
-                clearMessages();
                 loadMessages();
             }
         } catch (AuthenticationRequiredException e) {
@@ -284,27 +299,5 @@ public class ChatChatController {
         stage.setScene(new Scene(root));
         clientFunctional.clientCookies.deleteCookie();
         stage.show();
-    }
-
-    private void deleteButtonAction() {
-        TextInputDialog name = new TextInputDialog();
-        name.setTitle("Удалить сообщение");
-        name.setContentText("Пожалуйста, напишите id сообщения, которое хотите удалить:");
-        Optional<String> result = name.showAndWait();
-        if (result.isPresent()) {
-            clientFunctional.deleteMessage(Integer.parseInt(result.get()));
-        }
-        updateButtonAction();
-    }
-
-    private void banButtonAction() {
-        TextInputDialog name = new TextInputDialog();
-        name.setTitle("Удалить пользователя");
-        name.setContentText("Пожалуйста, напишите имя пользователя, которого хотите удалить:");
-        Optional<String> result = name.showAndWait();
-        if (result.isPresent()) {
-            clientFunctional.deleteUser(result.get());
-        }
-        updateButtonAction();
     }
 }
