@@ -5,7 +5,8 @@ import chat.Main.Cookies;
 import java.util.Random;
 
 public class ServerCookies implements Cookies {
-    public ServerCookies() {}
+    public ServerCookies() {
+    }
 
     public String getCookie() {
         int leftLimit = 48; // numeral '0'

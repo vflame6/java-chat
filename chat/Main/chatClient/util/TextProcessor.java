@@ -6,9 +6,7 @@ public class TextProcessor {
         String[] words = content.split(" ");
         int symbols = 3;
 
-        for (int i = 0; i < words.length; i++) {
-            String word = words[i];
-
+        for (String word : words) {
             if (symbols + word.length() < 44) {
                 result += " " + word;
                 symbols += 1 + word.length();
@@ -51,11 +49,11 @@ public class TextProcessor {
         String result = "";
         result += " " + word.substring(0, 44 - offset - 1) + "\n";
 
-        word = word.substring(44 - offset, word.length());
+        word = word.substring(44 - offset);
 
         for (int i = 0; i < word.length() / 44 + 1; i++) {
             if (44 * i + 44 > word.length()) {
-                result += "    " + word.substring(44 * i, word.length());
+                result += "    " + word.substring(44 * i);
             } else {
                 result += "    " + word.substring(44 * i, 44 * i + 44) + "\n";
             }

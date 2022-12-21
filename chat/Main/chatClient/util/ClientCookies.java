@@ -16,7 +16,7 @@ public class ClientCookies implements Cookies {
     }
 
     // Прочитать куки из файла и вернуть строку содержащую куку
-    public String getCookie(){
+    public String getCookie() {
         try {
             FileReader cookieFile = new FileReader("cookie.txt");
             char[] buffer = new char[8096];
@@ -30,9 +30,9 @@ public class ClientCookies implements Cookies {
             cookieFile.close();
             return cookie;
         } catch (IOException e) {
-                e.printStackTrace();
-                throw new RuntimeException(e);
-            }
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
     // Создать куки-файл
@@ -47,6 +47,7 @@ public class ClientCookies implements Cookies {
             throw new RuntimeException(e);
         }
     }
+
     // Удалить куки-файл
     public void deleteCookie() {
         File cookieFile = new File("cookie.txt");

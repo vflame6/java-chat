@@ -72,25 +72,23 @@ public class Encryptor {
         return null;
     }
 
-    public String encryptMessage(String msg)
-    {
+    public String encryptMessage(String msg) {
         try {
             byte[] msgBytes = msg.getBytes();
             Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
             cipher.init(Cipher.ENCRYPT_MODE, pub);
             byte[] encrypted = cipher.doFinal(msgBytes);
-            return  encodeData(encrypted);
-        }
-        catch (Exception e) {
+            return encodeData(encrypted);
+        } catch (Exception e) {
             return e.getMessage();
         }
     }
-    private String encodeData(byte[] data)
-    {
+
+    private String encodeData(byte[] data) {
         return Base64.getEncoder().encodeToString(data);
     }
-    public String decryptMessage(String encMsg)
-    {
+
+    public String decryptMessage(String encMsg) {
         try {
             byte[] encMsgBytes = decodeData(encMsg);
             Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
@@ -98,13 +96,12 @@ public class Encryptor {
             byte[] decryptMsg = cipher.doFinal(encMsgBytes);
 
             return new String(decryptMsg, StandardCharsets.UTF_8);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return e.getMessage();
         }
     }
-    private byte[] decodeData(String data)
-    {
+
+    private byte[] decodeData(String data) {
         return Base64.getDecoder().decode(data);
     }
 }

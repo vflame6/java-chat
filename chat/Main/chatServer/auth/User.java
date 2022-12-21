@@ -15,7 +15,9 @@ public class User {
         this.isAdmin = isAdmin;
     }
 
-    public int getId() { return id; }
+    public int getId() {
+        return id;
+    }
 
     public String getUsername() {
         return username;

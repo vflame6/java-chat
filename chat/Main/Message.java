@@ -3,7 +3,10 @@ package chat.Main;
 import java.io.*;
 import java.sql.Timestamp;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Base64;
+import java.util.List;
+import java.util.Objects;
+import java.util.TimeZone;
 
 public class Message implements Serializable {
     private static final DateTimeFormatter fullDateFormatter = DateTimeFormatter.ofPattern("E, dd MMM HH:mm")
@@ -83,7 +86,7 @@ public class Message implements Serializable {
             ObjectOutputStream oos = new ObjectOutputStream(baos);
             oos.writeObject(this);
             oos.close();
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return Base64.getEncoder().encodeToString(baos.toByteArray());

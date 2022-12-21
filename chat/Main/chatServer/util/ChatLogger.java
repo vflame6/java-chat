@@ -11,7 +11,8 @@ public class ChatLogger {
     private static final String accessLogFile = "log/access_log.txt";
     private static final DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
-    private ChatLogger() {}
+    private ChatLogger() {
+    }
 
     public static void logMessage(String from, String content) {
         try (FileWriter fileWriter = new FileWriter(messageLogFile, true)) {

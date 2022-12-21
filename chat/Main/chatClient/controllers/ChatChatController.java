@@ -18,14 +18,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.scene.input.KeyCode;
 import javafx.util.Duration;
 
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class ChatChatController {
     ClientFunctional clientFunctional = ClientHolder.getInstance().getClient();
@@ -247,6 +249,7 @@ public class ChatChatController {
             String message = enterMessage.getText();
             if (!message.equals("")) {
                 for (String singleMessage : TextProcessor.separateMessages(message)) {
+                    System.out.println(singleMessage);
                     clientFunctional.sendMessage(singleMessage);
                 }
             }

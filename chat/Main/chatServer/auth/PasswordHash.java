@@ -6,7 +6,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class PasswordHash {
-    private PasswordHash() {}
+    private PasswordHash() {
+    }
 
     public static String getPasswordHash(String password) {
         byte[] passwordBytes;

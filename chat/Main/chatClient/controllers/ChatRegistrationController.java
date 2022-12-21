@@ -1,8 +1,8 @@
 package chat.Main.chatClient.controllers;
 
-import chat.Main.chatClient.util.InvalidTelephoneException;
 import chat.Main.chatClient.ClientFunctional;
 import chat.Main.chatClient.util.ClientHolder;
+import chat.Main.chatClient.util.InvalidTelephoneException;
 import chat.Main.chatClient.util.SceneChanger;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -31,10 +31,6 @@ public class ChatRegistrationController {
     private Button signUpButton;
     @FXML
     private TextField telephoneString;
-    private String telephone;
-    private String password;
-    private String login;
-    private String passwordrep;
 
     @FXML
     void initialize() {
@@ -42,7 +38,7 @@ public class ChatRegistrationController {
         // Чтение ввода кнопок с поля ввода пароля
         // Enter-отправить запрос на регистрацию с введенными данными
         // Escape- выйти к логину
-        passwordRepeatString.setOnKeyPressed(new EventHandler<KeyEvent>() {
+        passwordRepeatString.setOnKeyPressed(new EventHandler<>() {
             @FXML
             public void handle(KeyEvent event) {
 
@@ -62,10 +58,10 @@ public class ChatRegistrationController {
     }
 
     private void signUpButtonAction() {
-        telephone = telephoneString.getText();
-        password = passwordString.getText();
-        passwordrep = passwordRepeatString.getText();
-        login = loginString.getText();
+        String telephone = telephoneString.getText();
+        String password = passwordString.getText();
+        String passwordrep = passwordRepeatString.getText();
+        String login = loginString.getText();
         Stage stage = (Stage) signUpButton.getScene().getWindow();
         Parent root;
 
@@ -73,9 +69,8 @@ public class ChatRegistrationController {
             problemString.setText("                                                                 Пароли не совпадают");
         }
         if (password.equals("")) {
-         problemString.setText("                                                             Пароль не может быть пустым");
-        }
-        else {
+            problemString.setText("                                                             Пароль не может быть пустым");
+        } else {
             try {
                 if (clientFunctional.register(login, password, telephone)) {
                     stage.close();

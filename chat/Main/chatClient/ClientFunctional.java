@@ -1,19 +1,19 @@
 package chat.Main.chatClient;
 
 import chat.Main.ChatCommands;
-import chat.Main.chatClient.util.InvalidTelephoneException;
 import chat.Main.Message;
 import chat.Main.chatClient.util.AuthenticationRequiredException;
 import chat.Main.chatClient.util.ClientCookies;
+import chat.Main.chatClient.util.InvalidTelephoneException;
 import chat.Main.chatClient.util.NoAdminRightsException;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.io.*;
-import java.sql.Timestamp;
-import java.util.List;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
+import java.io.*;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.sql.Timestamp;
+import java.util.List;
 
 public class ClientFunctional implements ChatCommands {
     private static final int port = 9000;
@@ -35,7 +35,7 @@ public class ClientFunctional implements ChatCommands {
         SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
 
         try {
-            if (address.equals("")){
+            if (address.equals("")) {
                 throw new UnknownHostException();
             }
             ip = InetAddress.getByName(address.trim());
@@ -95,7 +95,7 @@ public class ClientFunctional implements ChatCommands {
                 return false;
             } else {
                 String[] userData = result.split(";")[1]
-                                .split(" ");
+                        .split(" ");
                 this.username = userData[0];
                 isAdmin = Boolean.parseBoolean(userData[1]);
                 String cookie = userData[2];
@@ -208,7 +208,7 @@ public class ClientFunctional implements ChatCommands {
 
     // Метод прекращает сессию пользователя
     public boolean logout(String cookieValue) {
-        String command ="LOGOUT;" + cookieValue + "\n";
+        String command = "LOGOUT;" + cookieValue + "\n";
 
         try {
             out.write(command.getBytes());
@@ -293,10 +293,10 @@ public class ClientFunctional implements ChatCommands {
         try {
             out.write(command.getBytes());
             String result = inp.readLine();
-            if (result.equals("OK;")){
+            if (result.equals("OK;")) {
                 // OK;
                 return true;
-            } else if (result.equals("AUTHENTICATION_REQUIRED;")){
+            } else if (result.equals("AUTHENTICATION_REQUIRED;")) {
                 // AUTHENTICATION_REQUIRED;
                 throw new AuthenticationRequiredException("No authentication");
             } else {
@@ -311,7 +311,7 @@ public class ClientFunctional implements ChatCommands {
 
     // Удалить сообщение по id(только admin-user)
     public boolean deleteMessage(int id) {
-        String command ="DELETE_MESSAGE;" + id + "\n";
+        String command = "DELETE_MESSAGE;" + id + "\n";
 
         try {
             out.write(command.getBytes());
@@ -337,13 +337,13 @@ public class ClientFunctional implements ChatCommands {
     }
 
     // Удаление пользователя по username(Только админ)
-    public boolean deleteUser(String username){
+    public boolean deleteUser(String username) {
         String command = "DELETE_USER;" + username.trim() + "\n";
 
         try {
             out.write(command.getBytes());
             String result = inp.readLine();
-            return switch (result){
+            return switch (result) {
                 case "OK;" ->
                     // OK;
                         true;

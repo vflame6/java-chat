@@ -1,22 +1,18 @@
 package chat.Main.chatServer;
 
+import chat.Main.ChatCommands;
+import chat.Main.Message;
+import chat.Main.chatServer.auth.*;
+import chat.Main.chatServer.util.ChatLogger;
+import chat.Main.chatServer.util.DBConnect;
+import chat.Main.chatServer.util.Encryptor;
+
+import javax.net.ssl.SSLSocket;
 import java.io.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import javax.net.ssl.*;
-
-import chat.Main.ChatCommands;
-import chat.Main.chatServer.auth.InvalidTelephoneException;
-import chat.Main.Message;
-import chat.Main.chatServer.auth.Telephone;
-import chat.Main.chatServer.auth.User;
-import chat.Main.chatServer.util.ChatLogger;
-import chat.Main.chatServer.util.DBConnect;
-import chat.Main.chatServer.util.Encryptor;
-import chat.Main.chatServer.auth.PasswordHash;
-import chat.Main.chatServer.auth.ServerCookies;
 
 public class ChatThread extends Thread implements ChatCommands {
     private final SSLSocket sslSocket;
@@ -29,6 +25,7 @@ public class ChatThread extends Thread implements ChatCommands {
     private Timestamp lastChangeTimestamp;
     private static final ServerCookies serverCookies = new ServerCookies();
     private static final Encryptor encryptor = new Encryptor();
+
     public ChatThread(SSLSocket sslSocket) {
         this.sslSocket = sslSocket;
     }
@@ -101,7 +98,7 @@ public class ChatThread extends Thread implements ChatCommands {
                 getConfig(id);
             }
             // updateConfig(int id, String chatName)
-            case("UPDATE_CONFIG") -> {
+            case ("UPDATE_CONFIG") -> {
                 String[] inputs = command[1].split(" ");
                 int id = Integer.parseInt(inputs[0]);
                 String chatName = inputs[1];
@@ -131,7 +128,7 @@ public class ChatThread extends Thread implements ChatCommands {
                 int messageId = Integer.parseInt(id);
                 deleteMessage(messageId);
             }
-            case("DELETE_USER") -> {
+            case ("DELETE_USER") -> {
                 String username = command[1];
                 deleteUser(username);
             }
@@ -249,7 +246,7 @@ public class ChatThread extends Thread implements ChatCommands {
     // NO_SUCH_CONFIG;
     public boolean getConfig(int id) throws IOException {
         String output;
-        if(!isAuthenticated()) {
+        if (!isAuthenticated()) {
             return false;
         }
 
@@ -273,7 +270,7 @@ public class ChatThread extends Thread implements ChatCommands {
     // NO_SUCH_CONFIG;
     public boolean updateConfig(int id, String chatName) throws IOException {
         String output;
-        if(!isAuthenticated()) {
+        if (!isAuthenticated()) {
             return false;
         }
 
@@ -300,7 +297,7 @@ public class ChatThread extends Thread implements ChatCommands {
     // Удалить из базы значение сессии
     public boolean logout(String cookieValue) throws IOException {
         String output;
-        if(!isAuthenticated()) {
+        if (!isAuthenticated()) {
             return false;
         }
 

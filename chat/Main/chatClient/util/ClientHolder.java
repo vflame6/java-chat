@@ -6,9 +6,10 @@ public class ClientHolder {
     private ClientFunctional clientFunctional;
     private final static ClientHolder INSTANCE = new ClientHolder();
 
-    private ClientHolder() {}
+    private ClientHolder() {
+    }
 
-    public static ClientHolder getInstance(){
+    public static ClientHolder getInstance() {
         return INSTANCE;
     }
 

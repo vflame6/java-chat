@@ -1,5 +1,6 @@
 package chat.Main.chatServer.util;
 
+import chat.Main.Message;
 import chat.Main.chatServer.auth.User;
 import org.sqlite.SQLiteConfig;
 
@@ -7,14 +8,14 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import chat.Main.Message;
 
 public class DBConnect {
     private static final String DB_URL = "jdbc:sqlite:chatDatabase.db";
     private static final String DRIVER = "org.sqlite.JDBC";
 
     // Конструктор закрыт, нельзя создать экземпляр класса
-    private DBConnect() {}
+    private DBConnect() {
+    }
 
     // Получить соединение для работы с базой
     public static Connection getConnection() throws ClassNotFoundException {
@@ -23,7 +24,7 @@ public class DBConnect {
         try {
             SQLiteConfig config = new SQLiteConfig();
             config.enforceForeignKeys(true);
-            connection = DriverManager.getConnection(DB_URL,config.toProperties());
+            connection = DriverManager.getConnection(DB_URL, config.toProperties());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -100,7 +101,7 @@ public class DBConnect {
                 time DATETIME DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (user_id) REFERENCES users (id)
                 );""";
-        try(Connection connection = getConnection()) {
+        try (Connection connection = getConnection()) {
             Statement statement = connection.createStatement();
             statement.execute(sql);
         } catch (ClassNotFoundException | SQLException e) {
@@ -124,7 +125,7 @@ public class DBConnect {
     private static void createAdminUser() {
         String sql = "INSERT INTO users(username, telephone, passwordHash, isAdmin) VALUES('admin','+7 (999) 999-99-99', '21232f297a57a5a743894a0e4a801fc3', 1)";
 
-        try (Connection connection = getConnection()){
+        try (Connection connection = getConnection()) {
             Statement statement = connection.createStatement();
             statement.executeUpdate(sql);
         } catch (ClassNotFoundException | SQLException e) {
@@ -166,7 +167,7 @@ public class DBConnect {
     public static void createUser(String username, String telephone, String passwordHash) {
         String sql = "INSERT INTO users(username, telephone, passwordHash) VALUES(?,?,?)";
 
-        try (Connection connection = getConnection()){
+        try (Connection connection = getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, username);
             preparedStatement.setString(2, telephone);
@@ -338,7 +339,7 @@ public class DBConnect {
                 Timestamp date = resultSet.getTimestamp(4);
                 return new Message(id, from, content, date);
             }
-        }   catch (ClassNotFoundException | SQLException e) {
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
         return null;
