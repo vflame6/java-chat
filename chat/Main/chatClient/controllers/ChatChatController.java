@@ -6,6 +6,8 @@ import chat.Main.chatClient.util.AuthenticationRequiredException;
 import chat.Main.chatClient.util.ClientHolder;
 import chat.Main.chatClient.util.SceneChanger;
 import chat.Main.chatClient.util.TextProcessor;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -20,11 +22,10 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.scene.input.KeyCode;
+import javafx.util.Duration;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class ChatChatController {
     ClientFunctional clientFunctional = ClientHolder.getInstance().getClient();
@@ -71,6 +72,7 @@ public class ChatChatController {
             loadMessages();
             clientFunctional.getLastMessageTimestamp();
             time = clientFunctional.lastMessageTimestamp;
+            scheduleUpdateActions();
         } catch (AuthenticationRequiredException e) {
             logoutAction();
         }
@@ -233,6 +235,7 @@ public class ChatChatController {
                 loadConfig();
                 clearMessages();
                 loadMessages();
+                time = clientFunctional.lastMessageTimestamp;
             }
         } catch (AuthenticationRequiredException e) {
             logoutAction();
@@ -306,5 +309,14 @@ public class ChatChatController {
             clientFunctional.deleteUser(result.get());
         }
         updateButtonAction();
+    }
+
+    private void scheduleUpdateActions() {
+        Timeline updateActionsEvery5Seconds = new Timeline(
+                new KeyFrame(Duration.seconds(5),
+                        e -> updateButtonAction()
+                ));
+        updateActionsEvery5Seconds.setCycleCount(Timeline.INDEFINITE);
+        updateActionsEvery5Seconds.play();
     }
 }

@@ -5,3 +5,4 @@ log/*
 lib/junit
 lib/javafx-sdk-19
 lib/sqlite-jdbc-3.40.0.0.jar
+chat/Main/Main.java
