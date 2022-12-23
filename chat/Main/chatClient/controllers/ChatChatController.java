@@ -27,6 +27,7 @@ import javafx.util.Duration;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class ChatChatController {
@@ -65,9 +66,12 @@ public class ChatChatController {
     private Timestamp time;
     private KeyCode lastKey;
     private final List<Label> messageLabels = new ArrayList<>();
+    private Timeline updateActionsEvery5Seconds;
+    private boolean loggedIn;
 
     @FXML
     void initialize() {
+        loggedIn = true;
         try {
             loadButtonImages();
             loadConfig();
@@ -91,7 +95,7 @@ public class ChatChatController {
                     case ESCAPE -> logoutButtonAction();
                     case R -> {
                         if (lastKey == KeyCode.CONTROL) {
-                            updateButtonAction();
+                            updateAction();
                         }
                     }
                     default -> lastKey = event.getCode();
@@ -109,11 +113,6 @@ public class ChatChatController {
         if (clientFunctional.username.equals("admin")) {
             loadAdminInterface();
         }
-    }
-
-    private void loadAdminInterface() {
-        deleteButton.setOnAction((event) -> deleteButtonAction());
-        banButton.setOnAction((event) -> banButtonAction());
     }
 
     // Отобразить сообщение
@@ -191,6 +190,11 @@ public class ChatChatController {
         }
     }
 
+    private void loadAdminInterface() {
+        deleteButton.setOnAction((event) -> deleteButtonAction());
+        banButton.setOnAction((event) -> banButtonAction());
+    }
+
     private void changeTheme(Stage stage) {
         Parent root;
         if (stage.getTitle().equals("Chat")) {
@@ -219,18 +223,52 @@ public class ChatChatController {
         searchString.clear();
     }
 
-    private void logoutButtonAction() {
+    // Метод для выхода из текущей сессии (при ошибке AuthenticationRequiredException).
+    private void logoutAction() {
+        stopUpdateActions();
+        if (!loggedIn) {
+            return;
+        }
+
         Stage stage = (Stage) logOutButton.getScene().getWindow();
+        if (Objects.isNull(stage)) {
+            return;
+        }
+        stage.close();
+        Parent root;
+        root = SceneChanger.changeScene("ChatLogIn.fxml");
+        stage.setScene(new Scene(root));
+        clientFunctional.clientCookies.deleteCookie();
+        loggedIn = false;
+        stage.show();
+    }
+
+
+    private void logoutButtonAction() {
+        stopUpdateActions();
+        if (!loggedIn) {
+            return;
+        }
+
+        Stage stage = (Stage) logOutButton.getScene().getWindow();
+        if (Objects.isNull(stage)) {
+            return;
+        }
         stage.close();
         Parent root;
         root = SceneChanger.changeScene("ChatLogIn.fxml");
         stage.setScene(new Scene(root));
         String cookie = clientFunctional.clientCookies.getCookie();
         clientFunctional.logout(cookie);
+        loggedIn = false;
         stage.show();
     }
 
-    private void updateButtonAction() {
+    // Метод для автоматического обновления чата (с проверкой времени последнего изменения на сервере).
+    private void updateAction() {
+        if (!loggedIn) {
+            return;
+        }
         try {
             clientFunctional.getLastMessageTimestamp();
             if (clientFunctional.lastMessageTimestamp.compareTo(time) != 0) {
@@ -244,12 +282,25 @@ public class ChatChatController {
         }
     }
 
+    // Метод для принудительного обновления чата. Вызывается кнопкой и при вызове методов, делающих изменения на сервере.
+    private void updateButtonAction() {
+        try {
+            clientFunctional.getLastMessageTimestamp();
+            time = clientFunctional.lastMessageTimestamp;
+            loadConfig();
+            clearMessages();
+            loadMessages();
+        } catch (AuthenticationRequiredException e) {
+            logoutAction();
+        }
+    }
+
+    // Метод для отправки сообщений на сервер. Вызывается кнопкой sendButton.
     private void sendButtonAction() {
         try {
             String message = enterMessage.getText();
             if (!message.equals("")) {
                 for (String singleMessage : TextProcessor.separateMessages(message)) {
-                    System.out.println(singleMessage);
                     clientFunctional.sendMessage(singleMessage);
                 }
             }
@@ -282,15 +333,7 @@ public class ChatChatController {
         updateButtonAction();
     }
 
-    private void logoutAction() {
-        Stage stage = (Stage) logOutButton.getScene().getWindow();
-        stage.close();
-        Parent root;
-        root = SceneChanger.changeScene("ChatLogIn.fxml");
-        stage.setScene(new Scene(root));
-        clientFunctional.clientCookies.deleteCookie();
-        stage.show();
-    }
+
 
     private void deleteButtonAction() {
         TextInputDialog name = new TextInputDialog();
@@ -315,11 +358,18 @@ public class ChatChatController {
     }
 
     private void scheduleUpdateActions() {
-        Timeline updateActionsEvery5Seconds = new Timeline(
+         updateActionsEvery5Seconds = new Timeline(
                 new KeyFrame(Duration.seconds(5),
-                        e -> updateButtonAction()
+                        e -> updateAction()
                 ));
         updateActionsEvery5Seconds.setCycleCount(Timeline.INDEFINITE);
         updateActionsEvery5Seconds.play();
+    }
+
+    private void stopUpdateActions() {
+        if (updateActionsEvery5Seconds != null) {
+            updateActionsEvery5Seconds.stop();
+            updateActionsEvery5Seconds = null;
+        }
     }
 }
